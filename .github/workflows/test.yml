@@ -1,6 +1,9 @@
 name: Run tests & Analyse code
 
-on: [push]
+on:
+  push:
+    branches-ignore:
+        "master"
 
 jobs:
   Test:
