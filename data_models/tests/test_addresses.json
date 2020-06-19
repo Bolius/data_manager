@@ -1,0 +1,62 @@
+[
+    {
+        "address": "Lærkevej 6, 4840 Nørre Alslev",
+        "kvh": "3761217006",
+        "acadr_bbrid": "0a3f5086-556a-32b8-e044-0003ba298018",
+        "unadr_bbrid": "0a3f50b0-deee-32b8-e044-0003ba298018"
+    },
+    {
+        "address": "Humlestien 15, 4030 Tune",
+        "kvh": "2533055015",
+        "acadr_bbrid": "0a3f5081-2b48-32b8-e044-0003ba298018",
+        "unadr_bbrid": "0a3f50ab-0053-32b8-e044-0003ba298018"
+    },
+    {
+        "address": "Kløvervej 15, 6880 Tarm",
+        "kvh": "7601053015",
+        "acadr_bbrid": "0a3f5091-1fc4-32b8-e044-0003ba298018",
+        "unadr_bbrid": "0a3f50bd-3340-32b8-e044-0003ba298018"
+    },
+    {
+        "address": "Nygårdspark 63, 3520 Farum",
+        "kvh": "1900441063",
+        "acadr_bbrid": "0a3f507e-95a0-32b8-e044-0003ba298018",
+        "unadr_bbrid": "0a3f50a8-172f-32b8-e044-0003ba298018"
+    },
+    {
+        "address": "Lillevangsvej 28, 3520 Farum",
+        "kvh": "1900388028",
+        "acadr_bbrid": "0a3f507e-9307-32b8-e044-0003ba298018",
+        "unadr_bbrid": "0a3f50a8-1487-32b8-e044-0003ba298018"
+    },
+    {
+        "address": "Jens Holdgaards Vej 101, 7430 Ikast",
+        "kvh": "7560398101",
+        "acadr_bbrid": "0a3f5092-0d56-32b8-e044-0003ba298018",
+        "unadr_bbrid": "0a3f50be-4862-32b8-e044-0003ba298018"
+    },
+    {
+        "address": "Kragekærvej 3, Øse, 6800 Varde",
+        "kvh": "5730696003",
+        "acadr_bbrid": "0a3f508e-15bf-32b8-e044-0003ba298018",
+        "unadr_bbrid": "0a3f50b9-a4d7-32b8-e044-0003ba298018"
+    },
+    {
+        "address": "Lundevej 24, 7100 Vejle",
+        "kvh": "6301499024",
+        "acadr_bbrid": "0a3f5090-d5be-32b8-e044-0003ba298018",
+        "unadr_bbrid": "0a3f50bc-d220-32b8-e044-0003ba298018"
+    },
+    {
+        "address": "Skjoldsvej 79, 3650 Ølstykke",
+        "kvh": "2400783079",
+        "acadr_bbrid": "0a3f5080-f36a-32b8-e044-0003ba298018",
+        "unadr_bbrid": "0a3f50aa-c1bd-32b8-e044-0003ba298018"
+    },
+    {
+        "address": "Højskolevej 4, Ollerup, 5762 Vester Skerninge",
+        "kvh": "4790231004",
+        "acadr_bbrid": "0a3f5087-f33a-32b8-e044-0003ba298018",
+        "unadr_bbrid": "0a3f50b2-7a07-32b8-e044-0003ba298018"
+    }
+]

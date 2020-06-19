@@ -1,0 +1,29 @@
+query {
+  house: __type(name: "House"){
+    fields {
+      name
+     	type {
+        	ofType{
+            name
+            description
+            fields {
+              name
+              description
+              type {
+                kind
+               	ofType {
+                  kind
+                  name
+                  description
+                  fields {
+                    name
+                    description
+                  }
+                }
+              }
+           	}
+         }
+      }
+    }
+  }
+}

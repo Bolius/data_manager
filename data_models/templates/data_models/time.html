@@ -1,0 +1,10 @@
+{% extends 'data_models/base.html' %}
+{% load static %}
+
+{% block content %}
+  {% block graph %}
+    {% load plotly_dash%}
+    {%plotly_direct name="TimeVisualiser"%}
+  {% endblock %}
+
+{% endblock %}

@@ -1,0 +1,7 @@
+
+[
+    {
+        "name": "ml-orm",
+        "imageUri": "docker.pkg.github.com/bolius/machine-learning-orm/ml-orm"
+    }
+]

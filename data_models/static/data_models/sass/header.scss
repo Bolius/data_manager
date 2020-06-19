@@ -1,0 +1,52 @@
+@use 'definitions';
+
+nav {
+    @extend %bg-primary;
+    padding: 1% 5%;
+    display: flex !important;
+    align-items: stretch;
+
+    // Desktop horizontal nav bar
+    @include definitions.for-phone {
+        flex-direction: column;
+        justify-content: center;
+    }
+    @include definitions.for-desktop {
+        flex-direction: row;
+    }
+    > a {
+        align-self: center;
+        @extend %rounded-rect;
+        font-size: 20px;
+        padding: 7px;
+        color: white;
+        display: inline-block;
+
+        @include definitions.for-phone {
+            // Bigger buttons on phone
+            font-size: 24px;
+            padding: 15px 0;
+            margin: 15px 0;
+            width: 100%;
+            border: 1px solid white;
+            text-align: center !important;
+        }
+    }
+}
+
+.inactive {
+    display: none;
+}
+
+#toggle {
+    padding: 5px;
+    &:hover{
+        color: black;
+    }
+    @include definitions.for-desktop {
+        display: none;
+    }
+    @include definitions.for-phone {
+        display: block;
+    }
+}
