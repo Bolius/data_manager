@@ -1,0 +1,30 @@
+{% extends './mapView.html' %}
+
+{% block address %}
+  <div class="addressBar"> Kort for adressen {{ address }} </div>
+  <div class="mapContainer">
+    <table align="center" style="width:40%">
+      <tr>
+        <td>
+          <h5>Matrikelkort</h5>
+          <img src="{{ matrikel }}" alt="">
+        </td>
+        <td>
+          <h5>Overfladekort</h5>
+          <img src="{{ overflade }}" alt="">
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <h5>Skyggekort</h5>
+          <img src="{{ skygge }}" alt="">
+        </td>
+        <td>
+          <h5>Bluespot</h5>
+          <img src="{{ bluespot }}" alt="">
+        </td>
+      </tr>
+    </table>
+  </div>
+
+{% endblock %}

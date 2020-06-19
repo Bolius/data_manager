@@ -1,0 +1,39 @@
+{% extends './base.html' %} {% block content %} {% load static %}
+<div class="container">
+  <div id="intro">
+    <h1>Adresseudforsker</h1>
+    <p>
+      Denne side lader dig lave data opslag på en adresse, udover BBR data viser
+      den også de beregninger vores modeller laver.
+    </p>
+  </div>
+  <div class="input-group input-group-lg  dawa-autocomplete-container">
+    <div class="input-group-prepend">
+      <span class="input-group-text" id="addon-wrapping">Indtast Adresse:</span>
+    </div>
+    <input
+      type="search"
+      class="form-control"
+      placeholder="Jarmers Pl. 2, 1551 København"
+      id="autocomplete-input"
+    />
+  </div>
+</div>
+<script src="https://cdn.aws.dk/assets/dawa-autocomplete2/1.0.0/dawa-autocomplete2.min.js"></script>
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+/>
+<link rel="stylesheet" href="{% static 'address_app.css' %}" />
+<script>
+
+  dawaAutocomplete.dawaAutocomplete(
+    document.getElementById("autocomplete-input"),
+    {
+      select: function(selected) {
+        location.href = '/address/' + selected.tekst
+      }
+    }
+  );
+</script>
+{% endblock %}

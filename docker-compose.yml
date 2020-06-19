@@ -1,0 +1,58 @@
+version: "3.7"
+
+services:
+  web:
+    build:
+        context: .
+        args:
+            - arg_debug_mode=True
+    command: ./manage.py runserver web:80
+    volumes:
+      - .:/app
+    ports:
+      - "8000:80"
+    depends_on:
+      - database
+      - selenium
+    networks:
+      - webnet
+    environment:
+      - GEO_KEY=$GEO_KEY
+      - SECRET_KEY=$SECRET_KEY
+      - ADMINS=$ADMINS
+      - MANAGERS=$MANAGERS
+      - EMAIL_URL=$EMAIL_URL
+      - SENTRY_DSN=$SENTRY_DSN
+      - KORTFORSYNINGEN=$KORTFORSYNINGEN
+      - DATABASE_URL=$DATABASE_URL
+
+  database:
+    image: postgis/postgis:12-master
+    networks:
+      - webnet
+    volumes:
+      - postgis_orm:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_USER=$POSTGRES_USER
+      - POSTGRES_PASSWORD=$POSTGRES_PASSWORD
+      - POSTGRES_DB=$POSTGRES_DB
+    ports:
+      - "${DB_PORT}:${DB_PORT}"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  selenium:
+      image: selenium/standalone-chrome
+      networks:
+          - webnet
+      ports:
+          - 4444
+
+volumes:
+  postgis_orm:
+
+networks:
+  webnet:

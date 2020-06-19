@@ -1,0 +1,14 @@
+{% load static %}
+<nav>
+  <a id="toggle" class="active" href="#" onClick="toggleNav()">
+    <i class="fa fa-bars fa-2x"></i>
+  </a>
+  <a href="{% url "entry_page" %}">Bolius Dataudforsker</a>
+  <a href="{% url "time_visualiser" %}">Data over tid</a>
+  <a href="{% url "scatter" %}">Samlet Husdata</a>
+  <a href="{% url "mapS" %}">Danmarkskort</a>
+  <a href="{% url "entry_page" %}">Kommunekort</a>
+  <a href="{% url "address" %}">Slå bolig op</a>
+</nav>
+
+<script src="{% static "data_models/js/header.js" %}"></script>

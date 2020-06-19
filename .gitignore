@@ -1,0 +1,9 @@
+__pycache__
+**/data_models/css
+test-screens/
+.env
+htmlcov
+ai_models
+staticfiles
+db.sqlite3
+.coverage

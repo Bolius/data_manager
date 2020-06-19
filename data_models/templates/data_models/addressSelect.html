@@ -1,0 +1,29 @@
+{% extends './mapView.html' %}
+
+{% block address %}
+<div class="wrapper">
+  <div class="dawa-autocomplete-container">
+      <input type="search" id="autocomplete-default" class="form-control form-control-lg" placeholder="select address">
+      <button class="searchButton" type="submit" onclick="submitSearch()">
+        <i class="fa fa-search"></i>
+      </button>
+  </div>
+</div>
+
+<script>
+  dawaAutocomplete.dawaAutocomplete(document.getElementById("autocomplete-default"), {
+    select: function(selected) {
+      console.log('Selected address:');
+      console.dir(selected);
+    }
+  });
+
+  function submitSearch() {
+    var x = document.getElementById("autocomplete-default");
+    var defaultVal = x.defaultValue;
+    var currentVal = x.value;
+    location.href = '/maps/' + x.value
+  }
+</script>
+
+{% endblock %}

@@ -1,0 +1,52 @@
+query {
+   house(addressInput: "<address>"){
+    addressInput,
+    kvhxInput,
+    bbrInfo{
+      bbrId
+      address,
+      kvhx,
+      size,
+      groundSize
+      type,
+      address,
+      kvhx,
+      buildYear,
+      rebuildYear,
+      nrFloors,
+      propType,
+      hasBasement,
+      basementArea,
+      wallMaterial,
+      roofArea,
+      nrgHeat,
+      lat,
+      long,
+      x,
+      y
+    }
+    waterRisk {
+      hollowing {
+        image,
+        risk,
+      }
+      conductivity {
+        value,
+        risk,
+      }
+      fastningDegree {
+        image,
+        risk,
+        value
+      }
+      flood {
+         risk
+       }
+    }
+    radon {
+      bqm3,
+      soilType
+    }
+
+  }
+}
