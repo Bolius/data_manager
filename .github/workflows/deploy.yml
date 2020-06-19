@@ -13,9 +13,8 @@ jobs:
       - name: Push to GitHub Packages
         uses: docker/build-push-action@v1
         with:
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-          registry: docker.pkg.github.com
-          repository: bolius/data_manager/data_manager
+          username: ${{ secrets.doceker_user }}
+          password: ${{ secrets.docker_token }}
+          repository: rotendahl/bolius
           tag_with_sha: true
           tag_with_ref: true
