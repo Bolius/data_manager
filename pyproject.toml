@@ -34,6 +34,7 @@ django-extensions = "2.2.9"
 isort = {extras = ["pyproject"], version= "4.3.21"}
 selenium = "3.141.0"
 bpython = "^0.19"
+whitenoise = "^5.1.0"
 
 
 [tool.black]
