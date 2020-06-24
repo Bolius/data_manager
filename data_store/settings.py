@@ -6,7 +6,7 @@
   the settings.
 """
 import os
-
+print(os.environ)
 import dj_database_url
 import raven
 from environs import Env
