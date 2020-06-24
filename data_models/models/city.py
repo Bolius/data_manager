@@ -9,4 +9,4 @@ class City(models.Model):
     zip_code_end = models.IntegerField("Postnummer slut")
     municipality = models.ForeignKey(
         "Municipality", related_name="city", on_delete=models.PROTECT
-    )
+    )  # TODO fix this, points all to 1.

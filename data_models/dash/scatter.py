@@ -5,7 +5,7 @@ import plotly.graph_objs as go
 from django_plotly_dash import DjangoDash
 from numpy import arange, array, unique
 
-from data_models.models import BBR, CategoricalBBR, House, NumericBBR
+from data_models.models import BBR, CategoricalBBR, House, NumericBBR, City
 
 external_stylesheets = ["https://codepen.io/chriddyp/pen/bWLwgP.css"]
 app = DjangoDash("ScatterVis", external_stylesheets=external_stylesheets)
@@ -13,21 +13,22 @@ bbr = BBR.objects.all()
 
 bbr_num = NumericBBR.objects.all()
 bbr_categorical = CategoricalBBR.objects.all()
-
 houses = House.objects.all()
-
 
 build_years = arange(1800, 2020, 1)
 
 scalar_fields = NumericBBR._meta.get_fields()
 scalar_fields = [field.name for field in scalar_fields]
-scalar_fields.remove("bbr")
+# scalar_fields.remove("bbr")
 scalar_fields.remove("id")
 
 category_fields = CategoricalBBR._meta.get_fields()
 category_fields = [field.name for field in category_fields]
-category_fields.remove("bbr")
+# category_fields.remove("bbr")
 category_fields.remove("id")
+
+
+citites = City.objects.all()
 
 if len(scalar_fields) > 0:
     app.layout = html.Div(
@@ -52,7 +53,7 @@ if len(scalar_fields) > 0:
                                         id="val-from-x",
                                         placeholder="fra ...",
                                         type="number",
-                                        value="0",
+                                        value="1",
                                     ),
                                     dcc.Input(
                                         id="val-to-x",
@@ -84,7 +85,7 @@ if len(scalar_fields) > 0:
                                 options=[
                                     {"label": s, "value": s} for s in scalar_fields
                                 ],
-                                value=scalar_fields[0],
+                                value=scalar_fields[1],
                             ),
                             html.Div(
                                 [
@@ -92,7 +93,7 @@ if len(scalar_fields) > 0:
                                         id="val-from-y",
                                         placeholder="fra ...",
                                         type="number",
-                                        value="0",
+                                        value="1",
                                     ),
                                     dcc.Input(
                                         id="val-to-y",
@@ -208,11 +209,20 @@ if len(scalar_fields) > 0:
     ):
         # TODO: check security
         _locals = locals()
-        exec(
-            f"hs = bbr.filter(bbr_numeric__{xParam}__gt={valFromX})", globals(), _locals
-        )
 
-        print(_locals.get("hs"))
+        if yParam == xParam:
+            exec(
+                f"hs = bbr.filter(bbr_numeric__{xParam}__gte={valFromY}, bbr_numeric__{xParam}__lte={valToY})",
+                globals(),
+                _locals,
+            )
+        else:
+            exec(
+                f"hs = bbr.filter(bbr_numeric__{xParam}__gte={valFromY}, bbr_numeric__{xParam}__lte={valToY}, bbr_numeric__{yParam}__gte={valFromX}, bbr_numeric__{yParam}__lte={valToX})",
+                globals(),
+                _locals,
+            )
+        bbr = _locals.get("hs")
 
         hs = bbr.filter(
             bbr_numeric__building_area__gt=10,
@@ -221,33 +231,30 @@ if len(scalar_fields) > 0:
             construction_year__lte=yearValue[0] + 5,
         )
 
-        bbr_hs = array(hs.values_list("bbr_numeric_id")).flatten()
+        if hs.exists():
+            bbr_hs = array(hs.values_list("bbr_numeric_id")).flatten()
 
-        scatter_points = array(
-            bbr_num.filter(id__in=bbr_hs).values_list(xParam, yParam)
-        )
-        info, counts = unique(scatter_points, return_counts=True, axis=0)
-
-        # bbr_cat = array(hs.values_list("bbr_categorical_id")).flatten()
-        # color_by = array(
-        #     bbr_categorical.filter(id__in=bbr_cat).values_list(colorBy)
-        # ).flatten()
-        # print(min(counts), max(counts))
-        # cats = set(color_by)
+            scatter_points = array(
+                bbr_num.filter(id__in=bbr_hs).values_list(xParam, yParam)
+            )
+            info, counts = unique(scatter_points, return_counts=True, axis=0)
+        else:
+            info = None
+            counts = None
 
         plot = {
             "data": [
                 go.Scattergl(
                     # get all points that is satisfying the category prop
-                    x=info[:, 0],
-                    y=info[:, 1],
+                    x=info[:, 0] if info is not None else [],
+                    y=info[:, 1] if info is not None else [],
                     mode="markers",
                     opacity=0.7,
                     text=counts,
-                    # name=c,
-                    marker_size=[get_size(c, max(counts)) for c in counts],
+                    marker_size=[get_size(c, max(counts)) for c in counts]
+                    if counts is not None
+                    else 0,
                 )
-                # for c in cats
             ],
             "layout": go.Layout(
                 xaxis={

@@ -19,12 +19,12 @@ bbr_num = NumericBBR.objects.all()
 
 category_fields = CategoricalBBR._meta.get_fields()
 category_fields = [field.name for field in category_fields]
-category_fields.remove("bbr")
+# category_fields.remove("bbr")
 category_fields.remove("id")
 
 scalar_fields = NumericBBR._meta.get_fields()
 scalar_fields = [field.name for field in scalar_fields]
-scalar_fields.remove("bbr")
+# scalar_fields.remove("bbr")
 scalar_fields.remove("id")
 
 
