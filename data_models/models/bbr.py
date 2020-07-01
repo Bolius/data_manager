@@ -1,6 +1,7 @@
-from django.db import models
 from numpy import array, unique
+
 from data_models.api_wrappers import dawa_id_to_bbr
+from django.db import models
 from django.db.models import Avg, Count
 
 
@@ -144,7 +145,7 @@ class BBR(models.Model):  # TODO Rename to bulding / house
             "num_floors": BBR._compute_rolling_avgs("num_floors", min_year, max_year),
             "garage_area": BBR._compute_rolling_avgs("garage_area", min_year, max_year),
             "outhouse_area": BBR._compute_rolling_avgs(
-                "garage_area", min_year, max_year
+                "outhouse_area", min_year, max_year
             ),
         }
 
@@ -189,6 +190,6 @@ def _fill_zeroes(data):
                 if data[j] > 0:
                     upper_value = data[j]
                     break
-                    upper_value = upper_value if upper_value > 0 else lower_val
-                    data[i] = (upper_value + lower_val) / 2
-                    return data
+            upper_value = upper_value if upper_value > 0 else lower_val
+            data[i] = (upper_value + lower_val) / 2
+    return data
