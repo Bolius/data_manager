@@ -1,8 +1,9 @@
 import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Input, Output
-from data_models.models import BBR
 from django_plotly_dash import DjangoDash
+
+from data_models.models import BBR
 
 data = BBR.get_time_data()
 rolling_data = BBR.get_rolling_avgs()

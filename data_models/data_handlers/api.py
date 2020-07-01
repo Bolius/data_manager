@@ -2,7 +2,6 @@ import json
 import os
 
 import requests
-
 import utm
 from django.conf import settings
 

@@ -2,7 +2,6 @@ import json
 import os
 
 import requests
-
 from django.conf import settings
 
 header = {"Authorization": "Basic " + os.environ["GEO_KEY"]}

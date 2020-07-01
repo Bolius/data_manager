@@ -1,9 +1,9 @@
 import pandas as pd
-from sklearn.externals import joblib
 
 import geopandas as geo_pd
 from radon_notebooks.data_processing import one_hot_encode
 from shapely.geometry import Point
+from sklearn.externals import joblib
 
 
 class RadonPredicter:

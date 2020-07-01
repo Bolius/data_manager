@@ -1,4 +1,5 @@
 import graphene
+
 from data_models.geomatic.bbr import getBBRInfo
 from data_models.geomatic.mappings import unit_resityp_geo_map, unit_usage_v2_map
 

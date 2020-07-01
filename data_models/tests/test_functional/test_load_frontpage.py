@@ -1,10 +1,9 @@
 import os
 import socket
 
+from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from selenium import webdriver
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
-
-from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 
 from .functional_test_helpers import get_text_contains
 

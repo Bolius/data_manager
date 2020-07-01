@@ -1,7 +1,7 @@
+import geojson
 import pandas as pd
 from numpy import array
 
-import geojson
 import geopandas as gpd
 
 kommuner = "kommuner.geojson"

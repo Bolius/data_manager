@@ -1,11 +1,11 @@
-import plotly.graph_objs as go
-from numpy import array
-
 import dash
 import dash_core_components as dcc
 import dash_html_components as html
-from data_models.models import BBR, CategoricalBBR, House, NumericBBR
+import plotly.graph_objs as go
 from django_plotly_dash import DjangoDash
+from numpy import array
+
+from data_models.models import BBR, CategoricalBBR, House, NumericBBR
 
 mapbox_access_token = "pk.eyJ1IjoibWJwaGFtIiwiYSI6ImNqdDVqdGhwbjA2bjIzeW45dDR0MHl6bHAifQ.uxGVk7wDQmmOiwGS15ebjQ"
 app = DjangoDash("MapVis")

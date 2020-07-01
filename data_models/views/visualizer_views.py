@@ -1,8 +1,9 @@
-from data_models.schema import Query
 from django.conf import settings
 from django.core.management import call_command
 from django.shortcuts import render
 from graphene import Schema
+
+from data_models.schema import Query
 
 """ A dirty hack around plotly loading apps before migrations are applied """
 # TODO Make a better way for this

@@ -1,5 +1,6 @@
-from data_models.models import BBR, House
 from django.test import TestCase
+
+from data_models.models import BBR, House
 
 from .factories import add_houses
 
