@@ -1,6 +1,6 @@
 from django.db import models
-
 from data_models.api_wrappers import dawa_id_to_bbr
+from django.db.models import Count
 
 
 class BBR(models.Model):  # TODO Rename to bulding / house
@@ -23,7 +23,8 @@ class BBR(models.Model):  # TODO Rename to bulding / house
     num_toilets = models.IntegerField("Antal toiletter")
     num_rooms = models.IntegerField("Antal værelser")
 
-    # bbr_numeric = models.OneToOneField(NumericBBR, on_delete=models.CASCADE, null=True)
+    def __str__(self):
+        return f"BBR oplysninger for {self.accsses_address}"
 
     @staticmethod
     def add_buldings(house):
@@ -48,3 +49,26 @@ class BBR(models.Model):  # TODO Rename to bulding / house
         building.num_toilets = data["AntVandskylToilleter"]
         building.commercial_area = data["ENH_ERHV_ARL"]
         building.save()
+
+    @staticmethod
+    def get_time_data():
+        years = BBR.objects.values("construction_year").order_by("construction_year")
+        min_year = years.first()["construction_year"]
+        max_year = years.last()["construction_year"]
+
+        counts = {}
+        for year in years.annotate(count=Count("construction_year")):
+            counts[year["construction_year"]] = year["count"]
+
+        time_range = list(range(min_year, max_year + 1))
+        cum_summed = {}
+        total = 0
+        for year in time_range:
+            count = 0 if year not in counts.keys() else counts[year]
+            total += count
+            cum_summed[year] = total
+
+        return {
+            "time_range": time_range,
+            "houses_per_year": cum_summed,
+        }
