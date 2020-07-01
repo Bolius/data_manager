@@ -1,8 +1,18 @@
 from django.conf import settings
+from django.core.management import call_command
 from django.shortcuts import render
 from graphene import Schema
 
 from data_models.schema import Query
+
+""" A dirty hack around plotly loading apps before migrations are applied """
+# TODO Make a better way for this
+with open("/tmp/migrate_status", "w") as f:
+    call_command("showmigrations", stdout=f)
+with open("/tmp/migrate_status", "r") as f:
+    lines = " ".join(f.readlines())
+if "[ ]" not in lines:
+    from data_models.dash.time import app as TimeVis  # noqa
 
 
 def scatter(request):
@@ -10,7 +20,7 @@ def scatter(request):
 
 
 def TimeView(request):
-    return render(request, "data_models/time.html", {})
+    return render(request, "data_models/time.html", {"graph": 1})
 
 
 def map(request):
@@ -30,7 +40,6 @@ def address_view(request, address=None):
         schema = Schema(Query)
         result = schema.execute(query)
         meta = schema.execute(query1)
-        print(result.data)
         bbr_data = meta.data["house"]["fields"][3]["type"]["ofType"]["fields"]
         water_comes_data = meta.data["house"]["fields"][2]["type"]["ofType"]["fields"]
         radon_data = meta.data["house"]["fields"][4]["type"]["ofType"]["fields"]
