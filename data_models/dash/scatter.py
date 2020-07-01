@@ -1,33 +1,27 @@
-import plotly.graph_objs as go
-from numpy import arange, array, unique
+import urllib
 
 import dash
 import dash_core_components as dcc
 import dash_html_components as html
-from data_models.models import BBR, CategoricalBBR, House, NumericBBR
+import pandas as pd
+import plotly.graph_objs as go
 from django_plotly_dash import DjangoDash
+from numpy import arange
+
+from data_models.models import BBR
 
 external_stylesheets = ["https://codepen.io/chriddyp/pen/bWLwgP.css"]
 app = DjangoDash("ScatterVis", external_stylesheets=external_stylesheets)
-bbr = BBR.objects.all()
-
-bbr_num = NumericBBR.objects.all()
-bbr_categorical = CategoricalBBR.objects.all()
-
-houses = House.objects.all()
-
 
 build_years = arange(1800, 2020, 1)
 
-scalar_fields = NumericBBR._meta.get_fields()
+scalar_fields = BBR._meta.get_fields()
 scalar_fields = [field.name for field in scalar_fields]
-scalar_fields.remove("bbr")
 scalar_fields.remove("id")
+scalar_fields.remove("accsses_address")
+scalar_fields.remove("construction_year")
+scalar_fields.remove("reconstruction_year")
 
-category_fields = CategoricalBBR._meta.get_fields()
-category_fields = [field.name for field in category_fields]
-category_fields.remove("bbr")
-category_fields.remove("id")
 
 if len(scalar_fields) > 0:
     app.layout = html.Div(
@@ -52,7 +46,7 @@ if len(scalar_fields) > 0:
                                         id="val-from-x",
                                         placeholder="fra ...",
                                         type="number",
-                                        value="0",
+                                        value="1",
                                     ),
                                     dcc.Input(
                                         id="val-to-x",
@@ -84,7 +78,7 @@ if len(scalar_fields) > 0:
                                 options=[
                                     {"label": s, "value": s} for s in scalar_fields
                                 ],
-                                value=scalar_fields[0],
+                                value=scalar_fields[1],
                             ),
                             html.Div(
                                 [
@@ -92,7 +86,7 @@ if len(scalar_fields) > 0:
                                         id="val-from-y",
                                         placeholder="fra ...",
                                         type="number",
-                                        value="0",
+                                        value="1",
                                     ),
                                     dcc.Input(
                                         id="val-to-y",
@@ -118,26 +112,6 @@ if len(scalar_fields) > 0:
                             "display": "inline-block",
                         },
                     ),
-                    html.Div(
-                        [
-                            html.P(
-                                ["Farvelæg efter"],
-                                style={"textAlign": "center", "font  ": "bold"},
-                            ),
-                            dcc.Dropdown(
-                                id="color_by",
-                                options=[
-                                    {"label": s, "value": s} for s in category_fields
-                                ],
-                                value=category_fields[0],
-                            ),
-                        ],
-                        style={
-                            "width": "33%",
-                            "float": "right",
-                            "display": "inline-block",
-                        },
-                    ),
                 ],
                 style={"width": "80%", "margin-left": "auto", "margin-right": "auto"},
             ),
@@ -148,20 +122,20 @@ if len(scalar_fields) > 0:
             html.Div(
                 [
                     html.Div(id="table"),
-                    # html.A(
-                    #     "Download Data",
-                    #     id="download-link",
-                    #     download="rawdata.csv",
-                    #     href="",
-                    #     target="_blank",
-                    # ),
+                    html.A(
+                        "Download Data",
+                        id="download-link",
+                        download="rawdata.csv",
+                        href="",
+                        target="_blank",
+                    ),
                     dcc.Graph(id="indicator-graphic"),
                     html.H3("Årstal"),
                     dcc.RangeSlider(
                         id="year--slider",
                         min=min(build_years),
                         max=max(build_years),
-                        value=[1820],
+                        value=[1930],
                         step=5,
                         marks={
                             str(build_year): str(build_year)
@@ -186,7 +160,6 @@ if len(scalar_fields) > 0:
             dash.dependencies.Input("yaxis", "value"),
             dash.dependencies.Input("xaxis-type", "value"),
             dash.dependencies.Input("yaxis-type", "value"),
-            dash.dependencies.Input("color_by", "value"),
             dash.dependencies.Input("val-from-x", "value"),
             dash.dependencies.Input("val-to-x", "value"),
             dash.dependencies.Input("val-from-y", "value"),
@@ -195,59 +168,25 @@ if len(scalar_fields) > 0:
         ],
     )
     def update_graph(
-        yParam,
-        xParam,
-        yType,
-        xType,
-        colorBy,
-        valFromX,
-        valToX,
-        valFromY,
-        valToY,
-        yearValue,
+        yParam, xParam, yType, xType, valFromX, valToX, valFromY, valToY, yearValue,
     ):
-        # TODO: check security
-        _locals = locals()
-        exec(
-            f"hs = bbr.filter(bbr_numeric__{xParam}__gt={valFromX})", globals(), _locals
+        info, counts = BBR.get_scatter_points(
+            xParam, yParam, valFromX, valToX, valFromY, valToY, yearValue
         )
-
-        print(_locals.get("hs"))
-
-        hs = bbr.filter(
-            bbr_numeric__building_area__gt=10,
-            bbr_numeric__building_area__lt=500,
-            construction_year__gte=yearValue[0],
-            construction_year__lte=yearValue[0] + 5,
-        )
-
-        bbr_hs = array(hs.values_list("bbr_numeric_id")).flatten()
-
-        scatter_points = array(
-            bbr_num.filter(id__in=bbr_hs).values_list(xParam, yParam)
-        )
-        info, counts = unique(scatter_points, return_counts=True, axis=0)
-
-        # bbr_cat = array(hs.values_list("bbr_categorical_id")).flatten()
-        # color_by = array(
-        #     bbr_categorical.filter(id__in=bbr_cat).values_list(colorBy)
-        # ).flatten()
-        # print(min(counts), max(counts))
-        # cats = set(color_by)
 
         plot = {
             "data": [
                 go.Scattergl(
                     # get all points that is satisfying the category prop
-                    x=info[:, 0],
-                    y=info[:, 1],
+                    x=info[:, 0] if info is not None else [],
+                    y=info[:, 1] if info is not None else [],
                     mode="markers",
                     opacity=0.7,
                     text=counts,
-                    # name=c,
-                    marker_size=[get_size(c, max(counts)) for c in counts],
+                    marker_size=[get_size(c, max(counts)) for c in counts]
+                    if counts is not None
+                    else 0,
                 )
-                # for c in cats
             ],
             "layout": go.Layout(
                 xaxis={
@@ -271,49 +210,31 @@ if len(scalar_fields) > 0:
         return plot
 
     @app.callback(
-        dash.dependencies.Output("description", "children"),
+        dash.dependencies.Output("download-link", "href"),
         [
             dash.dependencies.Input("xaxis", "value"),
             dash.dependencies.Input("yaxis", "value"),
-            dash.dependencies.Input("color_by", "value"),
+            dash.dependencies.Input("val-from-x", "value"),
+            dash.dependencies.Input("val-to-x", "value"),
+            dash.dependencies.Input("val-from-y", "value"),
+            dash.dependencies.Input("val-to-y", "value"),
+            dash.dependencies.Input("year--slider", "value"),
         ],
     )
-    def update_description(x, y, c):
-        return
-        # xd = getattr(Domain.objects.get(value=x), "description")
-        # yd = getattr(Domain.objects.get(value=y), "description")
-        # cd = getattr(Domain.objects.get(value=c), "description")
-        # return [
-        #     html.Div([html.P(yd)], style={'width': '33%', 'display': 'inline-block'}),
-        #     html.Div([html.P(xd)], style={'width': '33%', 'display': 'inline-block'}),
-        #     html.Div([html.P(cd)], style={'width': '33%', 'display': 'inline-block'})
-        # ]
+    def update_download_link(
+        yParam, xParam, valFromX, valToX, valFromY, valToY, yearValue
+    ):
+        if yParam is None:
+            return
 
-    # @app.callback(
-    #     dash.dependencies.Output("download-link", "href"),
-    #     [
-    #         dash.dependencies.Input("xaxis", "value"),
-    #         dash.dependencies.Input("yaxis", "value"),
-    #         dash.dependencies.Input("color_by", "value"),
-    #         dash.dependencies.Input("year--slider", "value"),
-    #     ],
-    # )
-    # def update_download_link(yParam, xParam, colorBy, yearValue):
-    #     return
-    # hs = bbr.filter(
-    #     construction_year__gte=yearValue[0], construction_year__lte=yearValue[1]
-    # )
-    # bbr_hs = array(hs.values_list("bbr_numeric_id")).flatten()
-    # xaxis = array(bbr_num.filter(id__in=bbr_hs).values_list(xParam)).flatten()
-    # yaxis = array(bbr_num.filter(id__in=bbr_hs).values_list(yParam)).flatten()
-    #
-    # bbr_cat = array(hs.values_list("bbr_categorical_id")).flatten()
-    # color_by = array(
-    #     bbr_categorical.filter(id__in=bbr_cat).values_list(colorBy)
-    # ).flatten()
-    #
-    # dff = {xParam: xaxis, yParam: yaxis, colorBy: color_by}
-    # dff = pd.DataFrame(dff)
-    # csv_string = dff.to_csv(encoding="utf-8")
-    # csv_string = "data:text/csv;charset=utf-8," + urllib.parse.quote(csv_string)
-    # return csv_string
+        info, counts = BBR.get_scatter_points(
+            xParam, yParam, valFromX, valToX, valFromY, valToY, yearValue
+        )
+
+        if info is None and counts is None:
+            return
+        dff = {xParam: info[:, 0], yParam: info[:, 1], "number of buildings": counts}
+        dff = pd.DataFrame(dff)
+        csv_string = dff.to_csv(encoding="utf-8")
+        csv_string = "data:text/csv;charset=utf-8," + urllib.parse.quote(csv_string)
+        return csv_string

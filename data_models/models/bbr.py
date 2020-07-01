@@ -1,5 +1,6 @@
-from data_models.api_wrappers import dawa_id_to_bbr
 from django.db import models
+from numpy import array, unique
+from data_models.api_wrappers import dawa_id_to_bbr
 from django.db.models import Avg, Count
 
 
@@ -147,6 +148,36 @@ class BBR(models.Model):  # TODO Rename to bulding / house
             ),
         }
 
+    @staticmethod
+    def get_scatter_points(
+        xParam, yParam, valFromX, valToX, valFromY, valToY, yearValue
+    ):
+        # TODO: check security
+        _locals = locals()
+        query = (
+            f"hs = BBR.objects.filter({xParam}__gte={valFromY}, {xParam}__lte={valToY})"
+            if yParam == xParam
+            else f"hs = BBR.objects.filter({xParam}__gte={valFromY}, {xParam}__lte={valToY}, {yParam}__gte={valFromX}, {yParam}__lte={valToX})"
+        )
+
+        exec(
+            query, globals(), _locals,
+        )
+
+        bbr = _locals.get("hs")
+
+        hs = array(
+            bbr.filter(
+                construction_year__gte=yearValue[0],
+                construction_year__lte=yearValue[0] + 5,
+            ).values_list(xParam, yParam)
+        )
+
+        info, counts = None, None
+        if hs.size != 0:
+            info, counts = unique(hs, return_counts=True, axis=0)
+        return info, counts
+
 
 def _fill_zeroes(data):
     lower_val = 0
@@ -158,6 +189,6 @@ def _fill_zeroes(data):
                 if data[j] > 0:
                     upper_value = data[j]
                     break
-            upper_value = upper_value if upper_value > 0 else lower_val
-            data[i] = (upper_value + lower_val) / 2
-    return data
+                    upper_value = upper_value if upper_value > 0 else lower_val
+                    data[i] = (upper_value + lower_val) / 2
+                    return data
