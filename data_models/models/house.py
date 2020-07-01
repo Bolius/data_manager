@@ -14,7 +14,6 @@ from .bbr import BBR
 # from django.db import models
 
 
-
 # from .city import City
 
 # from .categoricalMapper import (  # sup_heat_types,; heat_instal,; water_types,; wall_types,
