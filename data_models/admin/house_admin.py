@@ -1,8 +1,7 @@
 """ Specifies which parts of the data models are visible in the admin UI """
-from django.contrib import admin
-
 from data_models.models import House
 from data_models.models.house import hash_address
+from django.contrib import admin
 
 
 class HouseAdmin(admin.ModelAdmin):

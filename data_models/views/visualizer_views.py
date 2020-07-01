@@ -1,8 +1,8 @@
+from data_models.dash.time import app as TimeVis
+from data_models.schema import Query
 from django.conf import settings
 from django.shortcuts import render
 from graphene import Schema
-from data_models.dash.time import app as TimeVis
-from data_models.schema import Query
 
 
 def scatter(request):

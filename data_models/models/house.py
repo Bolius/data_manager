@@ -4,11 +4,10 @@ from __future__ import unicode_literals
 import hashlib
 import os
 
+from data_models.api_wrappers import access_id_to_address, kvhx_to_address
 from django.contrib.gis.db import models as geo_models
 from django.contrib.gis.geos import Point
 from django.db import models
-
-from data_models.api_wrappers import access_id_to_address, kvhx_to_address
 
 from .bbr import BBR
 from .city import City

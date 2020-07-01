@@ -1,10 +1,10 @@
 """ Specifies which parts of the data models are visible in the admin UI """
 import pandas as pd
-from django.contrib import admin
 
 from data_models.models import House, Improvement
 from data_models.models.house import houseFields
 from data_models.models.improvements import allSeebs
+from django.contrib import admin
 
 
 class PropAdmin(admin.ModelAdmin):

@@ -1,6 +1,6 @@
-from django.db import models
 from data_models.api_wrappers import dawa_id_to_bbr
-from django.db.models import Count, Avg
+from django.db import models
+from django.db.models import Avg, Count
 
 
 class BBR(models.Model):  # TODO Rename to bulding / house

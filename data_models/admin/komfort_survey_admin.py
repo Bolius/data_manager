@@ -1,10 +1,9 @@
 """ Specifies which parts of the data models are visible in the admin UI """
 import csv
 
+from data_models.models import House, KomfortSurvey
 from django.contrib import admin
 from django.http import HttpResponse
-
-from data_models.models import House, KomfortSurvey
 
 
 class KomfortSurveyAdmin(admin.ModelAdmin):

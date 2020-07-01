@@ -1,6 +1,5 @@
-from graphene_django.utils.testing import GraphQLTestCase
-
 from data_models.schema import schema
+from graphene_django.utils.testing import GraphQLTestCase
 
 # import json
 

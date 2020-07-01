@@ -1,15 +1,8 @@
-import dash
 import dash_core_components as dcc
 import dash_html_components as html
-from django_plotly_dash import DjangoDash
 from dash.dependencies import Input, Output
 from data_models.models import BBR
-
-# from data_models.models import House, Domain, Category
-# from numpy import array, cumsum
-# import pandas as pd
-# import urllib
-
+from django_plotly_dash import DjangoDash
 
 data = BBR.get_time_data()
 

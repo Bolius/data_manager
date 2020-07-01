@@ -1,11 +1,11 @@
+import plotly.graph_objs as go
+from numpy import arange, array, unique
+
 import dash
 import dash_core_components as dcc
 import dash_html_components as html
-import plotly.graph_objs as go
-from django_plotly_dash import DjangoDash
-from numpy import arange, array, unique
-
 from data_models.models import BBR, CategoricalBBR, House, NumericBBR
+from django_plotly_dash import DjangoDash
 
 external_stylesheets = ["https://codepen.io/chriddyp/pen/bWLwgP.css"]
 app = DjangoDash("ScatterVis", external_stylesheets=external_stylesheets)

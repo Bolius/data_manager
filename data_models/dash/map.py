@@ -1,11 +1,11 @@
+import plotly.graph_objs as go
+from numpy import array
+
 import dash
 import dash_core_components as dcc
 import dash_html_components as html
-import plotly.graph_objs as go
-from django_plotly_dash import DjangoDash
-from numpy import array
-
 from data_models.models import BBR, CategoricalBBR, House, NumericBBR
+from django_plotly_dash import DjangoDash
 
 # import pandas as pd
 # import urllib
