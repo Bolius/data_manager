@@ -5,11 +5,12 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.generic.base import RedirectView
 from graphene_django.views import GraphQLView
 
+from data_models.dash.map import app as MapVis  # noqa
+from data_models.dash.scatter import app as ScatterVis  # noqa
+from data_models.dash.time import app as TimeVis  # noqa
+
 # from django.core.management import call_command
 
-from data_models.dash.scatter import app as ScatterVis  # noqa
-from data_models.dash.map import app as MapVis  # noqa
-from data_models.dash.time import app as TimeVis  # noqa
 
 from data_models.views import (  # predict_improvements,; predict_params,; add_session,; scatter,; map,; time,; colorMap,; mapView,; address_view,
     TimeView,

@@ -4,6 +4,7 @@ import dash_html_components as html
 import plotly.graph_objs as go
 from django_plotly_dash import DjangoDash
 from numpy import array
+
 from data_models.models import BBR, CategoricalBBR, House, NumericBBR
 
 mapbox_access_token = "pk.eyJ1IjoibWJwaGFtIiwiYSI6ImNqdDVqdGhwbjA2bjIzeW45dDR0MHl6bHAifQ.uxGVk7wDQmmOiwGS15ebjQ"
@@ -39,10 +40,7 @@ if len(scalar_fields) > 0:
                         id="val-from", placeholder="fra ...", type="number", value="0"
                     ),
                     dcc.Input(
-                        id="val-to",
-                        placeholder="til ...",
-                        type="number",
-                        value="99999999",
+                        id="val-to", placeholder="til ...", type="number", value="9999",
                     ),
                 ],
                 style={"width": "80%", "margin-left": "auto", "margin-right": "auto"},
@@ -86,11 +84,16 @@ if len(scalar_fields) > 0:
         ],
     )
     def update_map(val, valFrom, valTo, yearValue):
-        points = array(House.objects.values_list("coordinates")).reshape(
-            House.objects.count(), 2
+        _locals = locals()
+        query = f"hs = House.objects.filter(buldings__{val}__gte={valFrom}, buldings__{val}__lte={valTo})"
+
+        exec(
+            query, globals(), _locals,
         )
-        print()
-        # bbr = BBR.objects.filter(construction_year__gte=yearValue)
+
+        houses = _locals.get("hs")
+        points = array(houses.values_list("coordinates")).reshape(houses.count(), 2)
+
         return {
             "data": [
                 go.Scattermapbox(
@@ -124,19 +127,19 @@ if len(scalar_fields) > 0:
     #         dash.dependencies.Input("val-to", "value"),
     #     ],
     # )
-    def update_download_link(colorBy, val, valFrom, valTo):
-        # h = []
-        # for house in houses:
-        #     if getattr(house, val) >= int(valFrom) and getattr(house, val) <= int(
-        #         valTo
-        #     ):
-        #         h.append(house)
-        #
-        # lon_lat = [house.to_lat_lon() for house in h]
-        # t = [list(t) for t in zip(*lon_lat)]
-        # t0 = array(t[0])
-        #
-        # dff = pd.DataFrame({"lat": t0, "lon": t0})
-        # csv_string = dff.to_csv(encoding="utf-8")
-        # csv_string = "data:text/csv;charset=utf-8," + urllib.parse.quote(csv_string)
-        return  # csv_string
+    # def update_download_link(colorBy, val, valFrom, valTo):
+    # h = []
+    # for house in houses:
+    #     if getattr(house, val) >= int(valFrom) and getattr(house, val) <= int(
+    #         valTo
+    #     ):
+    #         h.append(house)
+    #
+    # lon_lat = [house.to_lat_lon() for house in h]
+    # t = [list(t) for t in zip(*lon_lat)]
+    # t0 = array(t[0])
+    #
+    # dff = pd.DataFrame({"lat": t0, "lon": t0})
+    # csv_string = dff.to_csv(encoding="utf-8")
+    # csv_string = "data:text/csv;charset=utf-8," + urllib.parse.quote(csv_string)
+#        return  # csv_string

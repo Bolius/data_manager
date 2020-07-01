@@ -1,7 +1,7 @@
 from django.db import models
+from numpy import array, unique
 
 from data_models.api_wrappers import dawa_id_to_bbr
-from numpy import array, unique
 
 
 class BBR(models.Model):  # TODO Rename to bulding / house
@@ -79,7 +79,3 @@ class BBR(models.Model):  # TODO Rename to bulding / house
         if hs.size != 0:
             info, counts = unique(hs, return_counts=True, axis=0)
         return info, counts
-
-    @staticmethod
-    def get_categories():
-        return
