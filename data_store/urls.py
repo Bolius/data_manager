@@ -1,6 +1,5 @@
 from data_models.dash.map import app as MapVis  # noqa
 from data_models.dash.scatter import app as ScatterVis  # noqa
-from data_models.dash.time import app as TimeVis  # noqa
 from django.conf import settings
 from django.contrib import admin
 from django.urls import include, path
@@ -25,8 +24,8 @@ from data_models.views import (  # predict_improvements,; predict_params,; add_s
 # with open("/tmp/migrate_status", "r") as f:
 #     lines = " ".join(f.readlines())
 # if "[ ]" not in lines:
-#    from data_models.dash.scatter import app as app1  # noqa
-#    from data_models.dash.colorMap import app as app2  # noqa
+#     from data_models.dash.scatter import app as app1  # noqa
+#     from data_models.dash.colorMap import app as app2  # noqa
 
 
 urlpatterns = [

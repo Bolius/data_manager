@@ -38,5 +38,5 @@ class BBRTimeTest(TestCase):
         data = BBR.get_rolling_avgs()
         self.assertEqual(list(range(1990, 1997)), data["time_range"])
         self.assertEqual(
-            [75.0, 100.0, 100.0, 100.0, 100.0, 100.0, 125.0] data["bulding_area"]
+            [75.0, 100.0, 100.0, 100.0, 100.0, 100.0, 125.0], data["bulding_area"]
         )
