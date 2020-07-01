@@ -8,7 +8,7 @@ from data_models.models import House
 
 def add_houses(nr_houses=100, page_nr=None):
     if nr_houses > 25000:
-        raise ValueError("Dawa won't allow more than 25.0000 houses")
+        raise ValueError("Dawa won't allow more than 25.000 houses")
     if page_nr is None:
         page_nr = randint(1, 25000 // nr_houses)
     response = requests.request(

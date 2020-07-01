@@ -30,7 +30,6 @@ def address_view(request, address=None):
         schema = Schema(Query)
         result = schema.execute(query)
         meta = schema.execute(query1)
-        print(result.data)
         bbr_data = meta.data["house"]["fields"][3]["type"]["ofType"]["fields"]
         water_comes_data = meta.data["house"]["fields"][2]["type"]["ofType"]["fields"]
         radon_data = meta.data["house"]["fields"][4]["type"]["ofType"]["fields"]
