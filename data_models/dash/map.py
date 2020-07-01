@@ -4,11 +4,7 @@ import dash_html_components as html
 import plotly.graph_objs as go
 from django_plotly_dash import DjangoDash
 from numpy import array
-
 from data_models.models import BBR, CategoricalBBR, House, NumericBBR
-
-# import pandas as pd
-# import urllib
 
 mapbox_access_token = "pk.eyJ1IjoibWJwaGFtIiwiYSI6ImNqdDVqdGhwbjA2bjIzeW45dDR0MHl6bHAifQ.uxGVk7wDQmmOiwGS15ebjQ"
 app = DjangoDash("MapVis")
@@ -19,36 +15,16 @@ bbr_num = NumericBBR.objects.all()
 
 category_fields = CategoricalBBR._meta.get_fields()
 category_fields = [field.name for field in category_fields]
-# category_fields.remove("bbr")
 category_fields.remove("id")
 
 scalar_fields = NumericBBR._meta.get_fields()
 scalar_fields = [field.name for field in scalar_fields]
-# scalar_fields.remove("bbr")
 scalar_fields.remove("id")
 
 
 if len(scalar_fields) > 0:
     app.layout = html.Div(
         children=[
-            html.Div(
-                [
-                    html.P(
-                        ["Farvelæg efter"], style={"textAlign": "left", "font": "bold"}
-                    ),
-                    dcc.Dropdown(
-                        id="color-by",
-                        options=[{"label": c, "value": c} for c in category_fields],
-                        value=category_fields[0],
-                    ),
-                ],
-                style={
-                    "width": "80%",
-                    "margin-left": "auto",
-                    "margin-right": "auto",
-                    "margin-bottom": "20px",
-                },
-            ),
             html.Div(
                 [
                     html.P(
@@ -85,7 +61,7 @@ if len(scalar_fields) > 0:
                         id="year--slider",
                         min=1850,
                         max=2020,
-                        value=[1990],
+                        value=1990,
                         updatemode="drag",
                         count=5,
                         step=5,
@@ -103,37 +79,27 @@ if len(scalar_fields) > 0:
     @app.callback(
         dash.dependencies.Output("map-s", "figure"),
         [
-            dash.dependencies.Input("color-by", "value"),
             dash.dependencies.Input("val", "value"),
             dash.dependencies.Input("val-from", "value"),
             dash.dependencies.Input("val-to", "value"),
             dash.dependencies.Input("year--slider", "value"),
         ],
     )
-    def update_map(colorBy, val, valFrom, valTo, yearValue):
-        hs = houses.filter(
-            bbr__construction_year__gte=yearValue[0],
-            bbr__construction_year__lte=yearValue[0] + 5,
-            bbr__bbr_categorical__residential_type="one_fam",
+    def update_map(val, valFrom, valTo, yearValue):
+        points = array(House.objects.values_list("coordinates")).reshape(
+            House.objects.count(), 2
         )
-
-        lon = array([getattr(h, "lon") for h in hs])
-        lat = array([getattr(h, "lat") for h in hs])
-
-        # color_by = array([getattr(h.bbr.bbr_categorical, colorBy) for h in hs])
-        # cats = list(set(color_by))
-
+        print()
+        # bbr = BBR.objects.filter(construction_year__gte=yearValue)
         return {
             "data": [
                 go.Scattermapbox(
-                    lat=lat,  # [color_by == getattr(c, "name")],
-                    lon=lon,  # [color_by == getattr(c, "name")],
-                    # name=,
+                    lat=points[:, 1],
+                    lon=points[:, 0],
                     mode="markers",
                     opacity=0.5,
                     marker=go.scattermapbox.Marker(size=5, opacity=0.5),
                 )
-                # for c in cats
             ],
             "layout": go.Layout(
                 autosize=True,
@@ -150,15 +116,14 @@ if len(scalar_fields) > 0:
             ),
         }
 
-    @app.callback(
-        dash.dependencies.Output("download-link", "href"),
-        [
-            dash.dependencies.Input("color-by", "value"),
-            dash.dependencies.Input("val", "value"),
-            dash.dependencies.Input("val-from", "value"),
-            dash.dependencies.Input("val-to", "value"),
-        ],
-    )
+    # @app.callback(
+    #     dash.dependencies.Output("download-link", "href"),
+    #     [
+    #         dash.dependencies.Input("val", "value"),
+    #         dash.dependencies.Input("val-from", "value"),
+    #         dash.dependencies.Input("val-to", "value"),
+    #     ],
+    # )
     def update_download_link(colorBy, val, valFrom, valTo):
         # h = []
         # for house in houses:
