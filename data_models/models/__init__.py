@@ -1,8 +1,8 @@
 from .action import Action
-from .bbr import BBR
+from .bbr import BBR, categorical_fields, integer_fields
 from .city import City
 from .domains import Category, Domain
-from .house import CategoricalBBR, House, NumericBBR, add_house
+from .house import House
 from .improvements import Improvement
 from .komfortSurvey import KomfortSurvey
 from .municipalities import Municipality
@@ -11,9 +11,7 @@ from .suggestion import Suggestion
 
 __all__ = [
     "Action",
-    "add_house",
     "BBR",
-    "CategoricalBBR",
     "Category",
     "City",
     "Domain",
@@ -21,7 +19,8 @@ __all__ = [
     "Improvement",
     "KomfortSurvey",
     "Municipality",
-    "NumericBBR",
     "Session",
     "Suggestion",
+    "integer_fields",
+    "categorical_fields",
 ]

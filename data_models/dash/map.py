@@ -5,23 +5,13 @@ import plotly.graph_objs as go
 from django_plotly_dash import DjangoDash
 from numpy import array
 
-from data_models.models import BBR, CategoricalBBR, House, NumericBBR
+from data_models.models import BBR, House, categorical_fields
+from data_models.models import integer_fields as scalar_fields
 
 mapbox_access_token = "pk.eyJ1IjoibWJwaGFtIiwiYSI6ImNqdDVqdGhwbjA2bjIzeW45dDR0MHl6bHAifQ.uxGVk7wDQmmOiwGS15ebjQ"
 app = DjangoDash("MapVis")
 houses = House.objects.all()
-
 bbr = BBR.objects.all()
-bbr_num = NumericBBR.objects.all()
-
-category_fields = CategoricalBBR._meta.get_fields()
-category_fields = [field.name for field in category_fields]
-category_fields.remove("id")
-
-scalar_fields = NumericBBR._meta.get_fields()
-scalar_fields = [field.name for field in scalar_fields]
-scalar_fields.remove("id")
-
 
 if len(scalar_fields) > 0:
     app.layout = html.Div(
@@ -47,13 +37,19 @@ if len(scalar_fields) > 0:
             ),
             html.Div(
                 [
-                    html.A(
-                        "Download Data",
-                        id="download-link",
-                        download="rawdata.csv",
-                        href="",
-                        target="_blank",
+                    html.P(
+                        ["Sortér efter"], style={"textAlign": "left", "font  ": "bold"}
                     ),
+                    dcc.Dropdown(
+                        id="sort-by",
+                        options=[{"label": c, "value": c} for c in categorical_fields],
+                        value=categorical_fields[0],
+                    ),
+                ],
+                style={"width": "80%", "margin-left": "auto", "margin-right": "auto"},
+            ),
+            html.Div(
+                [
                     dcc.Graph(id="map-s", config={"scrollZoom": True}),
                     dcc.RangeSlider(
                         id="year--slider",
@@ -74,16 +70,30 @@ if len(scalar_fields) > 0:
         ]
     )
 
+    def get_categorical(sortBy, choice, houses):
+        _locals = locals()
+        query = f"hs = houses.filter(buldings__{sortBy}= {choice})"
+        exec(
+            query, globals(), _locals,
+        )
+
+        houses = _locals.get("hs")
+        data_points = array(houses.values_list("coordinates")).reshape(
+            houses.count(), 2
+        )
+        return data_points
+
     @app.callback(
         dash.dependencies.Output("map-s", "figure"),
         [
             dash.dependencies.Input("val", "value"),
             dash.dependencies.Input("val-from", "value"),
             dash.dependencies.Input("val-to", "value"),
+            dash.dependencies.Input("sort-by", "value"),
             dash.dependencies.Input("year--slider", "value"),
         ],
     )
-    def update_map(val, valFrom, valTo, yearValue):
+    def update_map(val, valFrom, valTo, sortBy, yearValue):
         _locals = locals()
         query = f"hs = House.objects.filter(buldings__{val}__gte={valFrom}, buldings__{val}__lte={valTo})"
 
@@ -92,17 +102,19 @@ if len(scalar_fields) > 0:
         )
 
         houses = _locals.get("hs")
-        points = array(houses.values_list("coordinates")).reshape(houses.count(), 2)
+        choices = array(BBR._meta.get_field(sortBy).choices)
 
         return {
             "data": [
                 go.Scattermapbox(
-                    lat=points[:, 1],
-                    lon=points[:, 0],
+                    lat=get_categorical(sortBy, c[0], houses)[:, 1],
+                    lon=get_categorical(sortBy, c[0], houses)[:, 0],
                     mode="markers",
-                    opacity=0.5,
-                    marker=go.scattermapbox.Marker(size=5, opacity=0.5),
+                    name=c[1],
+                    opacity=0.8,
+                    marker=go.scattermapbox.Marker(size=6, opacity=0.8),
                 )
+                for c in choices
             ],
             "layout": go.Layout(
                 autosize=True,
@@ -118,28 +130,3 @@ if len(scalar_fields) > 0:
                 ),
             ),
         }
-
-    # @app.callback(
-    #     dash.dependencies.Output("download-link", "href"),
-    #     [
-    #         dash.dependencies.Input("val", "value"),
-    #         dash.dependencies.Input("val-from", "value"),
-    #         dash.dependencies.Input("val-to", "value"),
-    #     ],
-    # )
-    # def update_download_link(colorBy, val, valFrom, valTo):
-    # h = []
-    # for house in houses:
-    #     if getattr(house, val) >= int(valFrom) and getattr(house, val) <= int(
-    #         valTo
-    #     ):
-    #         h.append(house)
-    #
-    # lon_lat = [house.to_lat_lon() for house in h]
-    # t = [list(t) for t in zip(*lon_lat)]
-    # t0 = array(t[0])
-    #
-    # dff = pd.DataFrame({"lat": t0, "lon": t0})
-    # csv_string = dff.to_csv(encoding="utf-8")
-    # csv_string = "data:text/csv;charset=utf-8," + urllib.parse.quote(csv_string)
-#        return  # csv_string

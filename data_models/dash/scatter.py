@@ -9,19 +9,11 @@ from django_plotly_dash import DjangoDash
 from numpy import arange
 
 from data_models.models import BBR
+from data_models.models import integer_fields as scalar_fields
 
 external_stylesheets = ["https://codepen.io/chriddyp/pen/bWLwgP.css"]
 app = DjangoDash("ScatterVis", external_stylesheets=external_stylesheets)
-
 build_years = arange(1800, 2020, 1)
-
-scalar_fields = BBR._meta.get_fields()
-scalar_fields = [field.name for field in scalar_fields]
-scalar_fields.remove("id")
-scalar_fields.remove("accsses_address")
-scalar_fields.remove("construction_year")
-scalar_fields.remove("reconstruction_year")
-
 
 if len(scalar_fields) > 0:
     app.layout = html.Div(
