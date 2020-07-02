@@ -13,6 +13,7 @@ with open("/tmp/migrate_status", "r") as f:
     lines = " ".join(f.readlines())
 if "[ ]" not in lines:
     from data_models.dash.time import app as TimeVis  # noqa
+    from data_models.dash.colorMap import app as MuniVis  # noqa
 
 
 def scatter(request):
@@ -27,8 +28,8 @@ def map(request):
     return render(request, "data_models/map.html", {})
 
 
-def colorMap(request):
-    return render(request, "data_models/colormap.html", {})
+def MunicipalityMapView(request):
+    return render(request, "data_models/municipality_map.html", {})
 
 
 def address_view(request, address=None):
