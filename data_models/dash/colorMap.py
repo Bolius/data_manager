@@ -1,13 +1,13 @@
-from dash.dependencies import Input, Output
 import dash_core_components as dcc
 import dash_html_components as html
 import geojson
 import pandas as pd
-from django_plotly_dash import DjangoDash
-from data_models.models import Municipality
 import plotly.express as px
+from dash.dependencies import Input, Output
 from django.core.serializers import serialize
+from django_plotly_dash import DjangoDash
 
+from data_models.models import Municipality
 
 app = DjangoDash("colorMap")
 
