@@ -35,7 +35,7 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("", EntryPage, name="entry_page"),
     path("scatter", scatter, name="scatter"),
-    path("mapScatter", map, name="mapS"),
+    path("visualizer/map", map, name="map_visualiser"),
     path("visualizer/time", TimeView, name="time_visualiser"),
     path("graphql/", csrf_exempt(GraphQLView.as_view(graphiql=False))),
     path(r"address/", address_view, name="address"),

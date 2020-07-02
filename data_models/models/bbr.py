@@ -63,39 +63,40 @@ class BBR(models.Model):  # TODO Rename to bulding / house
     num_toilets = models.IntegerField("Antal toiletter")
     num_rooms = models.IntegerField("Antal værelser")
 
+    # TODO set to choicefield
     heat_install = models.CharField(
-        max_length=2, choices=HEAT_INSTALL_CHOICES, default="0"
+        max_length=2, choices=HEAT_INSTALL_CHOICES, null=True
     )
-    heat_type = models.CharField(max_length=2, choices=HEAT_TYPE_CHOICES, default="0")
+    heat_type = models.CharField(max_length=2, choices=HEAT_TYPE_CHOICES, null=True)
 
     heat_supply = models.CharField(
-        max_length=2, choices=HEAT_SUPPLY_INSTALL_CHOICES, default="0"
+        max_length=2, choices=HEAT_SUPPLY_INSTALL_CHOICES, null=True
     )
     water_supply = models.CharField(
-        max_length=2, choices=WATER_SUPPLY_CHOICES, default="0"
+        max_length=2, choices=WATER_SUPPLY_CHOICES, null=True,
     )
     wall_material = models.CharField(
-        max_length=2, choices=WALL_MATERIAL_CHOICES, default="0"
+        max_length=2, choices=WALL_MATERIAL_CHOICES, null=True,
     )
 
     roofing_material = models.CharField(
-        max_length=2, choices=ROOFING_MATERIAL_CHOICES, default="0"
+        max_length=2, choices=ROOFING_MATERIAL_CHOICES, null=True,
     )
 
     property_type = models.CharField(
-        max_length=2, choices=PROPERTY_TYPE_CHOICES, default="0"
+        max_length=2, choices=PROPERTY_TYPE_CHOICES, null=True,
     )
 
     kitchen_facility = models.CharField(
-        max_length=2, choices=KITCHEN_FACILITY, default="0"
+        max_length=2, choices=KITCHEN_FACILITY, null=True,
     )
 
     toilet_facility = models.CharField(
-        max_length=2, choices=TOILET_FACILITY, default="0"
+        max_length=2, choices=TOILET_FACILITY, null=True,
     )
 
     bathing_facility = models.CharField(
-        max_length=2, choices=BATHING_FACILITY, default="0"
+        max_length=2, choices=BATHING_FACILITY, null=True
     )
 
     def __str__(self):
@@ -124,53 +125,21 @@ class BBR(models.Model):  # TODO Rename to bulding / house
         building.num_toilets = data["AntVandskylToilleter"]
         building.commercial_area = data["ENH_ERHV_ARL"]
 
-        building.heat_install = (
-            data["bygning"]["VARMEINSTAL_KODE"]
-            if data["bygning"]["VARMEINSTAL_KODE"] is not None
-            else "0"
-        )
-        building.heat_type = (
-            data["bygning"]["OPVARMNING_KODE"]
-            if data["bygning"]["OPVARMNING_KODE"] is not None
-            else "0"
-        )
-        building.heat_supply = (
-            data["bygning"]["VARME_SUPPL_KODE"]
-            if data["bygning"]["VARME_SUPPL_KODE"] is not None
-            else "0"
-        )
-        building.water_supply = (
-            data["bygning"]["BYG_VANDFORSY_KODE"]
-            if data["bygning"]["BYG_VANDFORSY_KODE"]
-            else "0"
-        )
-        building.wall_material = (
-            data["bygning"]["YDERVAEG_KODE"]
-            if data["bygning"]["YDERVAEG_KODE"] is None
-            else "0"
-        )
-
-        building.roofing_material = (
-            data["bygning"]["TAG_KODE"] if data["bygning"]["TAG_KODE"] is None else "0"
-        )
-
-        building.property_type = (
-            data["BOLIGTYPE_KODE"] if data["BOLIGTYPE_KODE"] is None else "0"
-        )
-
-        building.kitchen_facility = (
-            data["KOEKKEN_KODE"] if data["KOEKKEN_KODE"] is None else "0"
-        )
-
-        building.toilet_facility = (
-            data["TOILET_KODE"] if data["TOILET_KODE"] is None else "0"
-        )
-
-        building.bathing_facility = (
-            data["BAD_KODE"] if data["BAD_KODE"] is None else "0"
-        )
-
+        building.heat_install = data["bygning"]["VARMEINSTAL_KODE"]
+        building.heat_type = data["bygning"]["OPVARMNING_KODE"]
+        building.heat_supply = data["bygning"]["VARME_SUPPL_KODE"]
+        building.water_supply = data["bygning"]["BYG_VANDFORSY_KODE"]
+        building.wall_material = data["bygning"]["YDERVAEG_KODE"]
+        building.roofing_material = data["bygning"]["TAG_KODE"]
+        building.property_type = data["BOLIGTYPE_KODE"]
+        building.kitchen_facility = data["KOEKKEN_KODE"]
+        building.toilet_facility = data["TOILET_KODE"]
+        building.bathing_facility = data["BAD_KODE"]
         building.save()
+
+    @staticmethod
+    def accumulated_sum_for_catatgorical():
+        pass
 
     @staticmethod
     def get_time_data():
