@@ -41,3 +41,27 @@ class BBRTimeTest(TestCase):
         self.assertEqual(
             [75.0, 100.0, 100.0, 100.0, 100.0, 100.0, 125.0], data["bulding_area"]
         )
+
+    def test_accumulated_sum_for_catatgorical(self):
+        houses = add_houses(nr_houses=3)
+        houses = [h.buldings.first() for h in houses]
+        [h1, h2, h3] = houses
+        h1.construction_year = 1990
+        h1.kitchen_facility = "E"
+
+        h2.construction_year = 1991
+        h2.kitchen_facility = "E"
+
+        h3.construction_year = 1992
+        h3.kitchen_facility = "F"
+
+        [h.save() for h in houses]
+        expected = [
+            {"0": 0, "E": 1, "F": 0, "G": 0, "H": 0},
+            {"0": 0, "E": 2, "F": 0, "G": 0, "H": 0},
+            {"0": 0, "E": 2, "F": 1, "G": 0, "H": 0},
+        ]
+        actual = BBR.accumulated_sum_for_catatgorical("kitchen_facility", 1990, 1992)
+        self.assertEqual(len(expected), len(actual))
+        self.assertEqual(expected[0], actual[0])
+        self.assertEqual(expected, actual)
