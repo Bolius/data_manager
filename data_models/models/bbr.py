@@ -1,7 +1,7 @@
 from django.db import models
 from django.db.models import Avg, Count
 from numpy import array, unique
-
+from collections import defaultdict
 from data_models.api_wrappers import dawa_id_to_bbr
 
 from .categoricalMapper import (
@@ -138,8 +138,24 @@ class BBR(models.Model):  # TODO Rename to bulding / house
         building.save()
 
     @staticmethod
-    def accumulated_sum_for_catatgorical():
-        pass
+    def accumulated_sum_for_catatgorical(field, min_year, max_year):
+        year_value = list(
+            BBR.objects.values(field, "construction_year").order_by("construction_year")
+        )
+        result = []
+        year = min_year
+        keys = [val for (val, _name) in BBR._meta.get_field(field).choices]
+        current_result = {key: 0 for key in keys}
+        while len(year_value) > 0 and year <= max_year:
+            if year != year_value[0]["construction_year"]:
+                result.append(current_result.copy())
+                year += 1
+            else:
+                value = year_value.pop(0)
+                current_result[value[field]] += 1
+
+        result.append(current_result)
+        return result
 
     @staticmethod
     def get_time_data():
@@ -181,6 +197,11 @@ class BBR(models.Model):  # TODO Rename to bulding / house
             "time_range": time_range,
             "houses_per_year": build_cum_summed,
             "recon_per_year": recon_cum_summed,
+            "categorical": {
+                "heat_install": BBR.accumulated_sum_for_catatgorical(
+                    "heat_install", min_year, max_year
+                )
+            },
         }
 
     @staticmethod
