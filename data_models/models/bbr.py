@@ -1,7 +1,7 @@
 from django.db import models
 from django.db.models import Avg, Count
 from numpy import array, unique
-from collections import defaultdict
+
 from data_models.api_wrappers import dawa_id_to_bbr
 
 from .categoricalMapper import (
@@ -152,7 +152,8 @@ class BBR(models.Model):  # TODO Rename to bulding / house
                 year += 1
             else:
                 value = year_value.pop(0)
-                current_result[value[field]] += 1
+                if value[field] is not None:
+                    current_result[value[field]] += 1
 
         result.append(current_result)
         return result
