@@ -13,7 +13,7 @@ with open("/tmp/migrate_status", "r") as f:
     lines = " ".join(f.readlines())
 if "[ ]" not in lines:
     from data_models.dash.time import app as TimeVis  # noqa
-    from data_models.dash.colorMap import app as MuniVis  # noqa
+    from data_models.dash.municipality_map import app as MuniVis  # noqa
 
 
 def scatter(request):
