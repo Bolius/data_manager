@@ -94,7 +94,7 @@ if len(scalar_fields) > 0:
                                 options=[
                                     {"label": i, "value": i} for i in ["Linear", "Log"]
                                 ],
-                                value="Linear",
+                                value="Log",
                                 labelStyle={"display": "inline-block"},
                             ),
                         ],

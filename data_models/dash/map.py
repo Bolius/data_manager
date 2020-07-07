@@ -50,7 +50,11 @@ if len(scalar_fields) > 0:
             ),
             html.Div(
                 [
-                    dcc.Graph(id="map-s", config={"scrollZoom": True}),
+                    dcc.Graph(
+                        id="map-s",
+                        config={"scrollZoom": True},
+                        style={"width": "1300px", "margin": "auto"},
+                    ),
                     dcc.RangeSlider(
                         id="year--slider",
                         min=1850,
