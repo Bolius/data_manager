@@ -5,14 +5,14 @@ import plotly.graph_objs as go
 from django_plotly_dash import DjangoDash
 from numpy import arange
 
-from data_models.models import BBR, Municipality
+from data_models.models import BBR, Municipality, House
 from data_models.models import integer_fields as scalar_fields, categorical_fields
 
 external_stylesheets = ["https://codepen.io/chriddyp/pen/bWLwgP.css"]
 app = DjangoDash("HistogramVis", external_stylesheets=external_stylesheets)
 build_years = arange(1800, 2020, 1)
 municipalities = Municipality.objects.all()
-print(municipalities)
+
 if len(scalar_fields) > 0:
     app.layout = html.Div(
         children=[
@@ -58,6 +58,40 @@ if len(scalar_fields) > 0:
                         ],
                         style={"width": "33%", "display": "inline-block"},
                     ),
+                    html.Div(
+                        [
+                            html.P(
+                                ["Sammenlign kommuner"],
+                                style={"textAlign": "center", "font  ": "bold"},
+                            ),
+                            dcc.Dropdown(
+                                id="muni-choice",
+                                options=[
+                                    {"label": muni.name, "value": muni.name}
+                                    for muni in municipalities
+                                ],
+                                multi=True,
+                                value=[municipalities[0].name],
+                            ),
+                        ],
+                        style={"width": "33%"},
+                    ),
+                    html.Div(
+                        [
+                            html.P(
+                                ["Vælg kategori"],
+                                style={"textAlign": "center", "font  ": "bold"},
+                            ),
+                            dcc.Dropdown(
+                                id="category-choice",
+                                options=[
+                                    {"label": c, "value": c} for c in categorical_fields
+                                ],
+                                value=categorical_fields[0],
+                            ),
+                        ],
+                        style={"width": "33%"},
+                    ),
                 ],
                 style={"width": "80%", "margin-left": "auto", "margin-right": "auto"},
             ),
@@ -68,9 +102,9 @@ if len(scalar_fields) > 0:
         ]
     )
 
-    def get_sum(category, type):
+    def get_sum(hs, category, type):
         _locals = locals()
-        query = f"hs = BBR.objects.filter({category}={type})"
+        query = f"hs = hs.filter(buldings__{category}='{type}')"
         exec(
             query, globals(), _locals,
         )
@@ -85,22 +119,30 @@ if len(scalar_fields) > 0:
             dash.dependencies.Input("xaxis-type", "value"),
             dash.dependencies.Input("val-from-x", "value"),
             dash.dependencies.Input("val-to-x", "value"),
+            dash.dependencies.Input("muni-choice", "value"),
+            dash.dependencies.Input("category-choice", "value"),
         ],
     )
-    def update_graph(xParam, xType, valFromX, valToX):
+    def update_graph(xParam, xType, valFromX, valToX, muniChoice, categoryChoice):
         data = []
-        category = categorical_fields[0]
-        cats = BBR._meta.get_field(category).choices
-
+        print(muniChoice, categoryChoice)
+        cats = BBR._meta.get_field(categoryChoice).choices
         x = [c[1] for c in cats]
-        y = [get_sum(category, c[0]) for c in cats]
 
+        for m in muniChoice:
+            hs = House.objects.filter(municipality=municipalities.get(name=m))
+
+            y = [get_sum(hs, categoryChoice, c[0]) / len(hs) * 100 for c in cats]
+
+            data.append({"x": x, "y": y, "type": "bar", "name": m})
+
+        print(data)
         plot = {
-            "data": [{"x": x, "y": y, "type": "bar", "name": "SF"}],
+            "data": data,
             "layout": go.Layout(
                 xaxis={"title": "Byer", "gridcolor": "white", "gridwidth": 2},
                 yaxis={
-                    "title": "Antal",
+                    "title": "Procentdel",
                     "type": "linear" if xType == "Linear" else "log",
                     "gridcolor": "white",
                     "gridwidth": 2,
