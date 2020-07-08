@@ -2,7 +2,6 @@
 from django.contrib import admin
 
 from data_models.models import House
-from data_models.models.house import hash_address
 
 
 class HouseAdmin(admin.ModelAdmin):
@@ -90,25 +89,6 @@ class HouseAdmin(admin.ModelAdmin):
         "prop_type",
         "energyLabel",
     )
-
-    def hash_address(self, request, queryset):
-        for house in queryset:
-            house.address = hash_address(house.address)
-            house.save()
-
-    # def check_dublets(self, request, queryset):
-    #     for house in queryset:
-    #         houses = House.objects.filter(address=house.address)
-    #         if len(houses) > 1:
-    #             surveys = KomfortSurvey.objects.filter(house__address=houses[0].address)
-    #             if len(surveys) > 1:
-    #                 for i in range(1, len(surveys)):
-    #                     surveys[i].delete()
-    #             else:
-    #                 for i in range(1, len(houses)):
-    #                     houses[i].delete()
-
-    actions = ["hash_address", "check_dublets"]
 
 
 admin.site.register(House, HouseAdmin)

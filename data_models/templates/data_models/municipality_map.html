@@ -3,8 +3,10 @@
 
 {% block content %}
   {% block graph %}
+  <div class="graph-container">
     {% load plotly_dash%}
-    {%plotly_direct name="colorMap"%}
+    {%plotly_direct name="municipality_map"%}
+  </div>
   {% endblock %}
 
 {% endblock %}
