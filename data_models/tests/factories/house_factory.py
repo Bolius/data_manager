@@ -22,5 +22,5 @@ def add_houses(nr_houses=100, page_nr=None):
     )
     created_houses = []
     for house_bulding in tqdm(response.json(), desc="Adding houses"):
-        created_houses.append(House.add_house_by_access_id(house_bulding["EnhAdr_id"]))
+        created_houses.append(House.add_house(access_id=house_bulding["EnhAdr_id"]))
     return created_houses

@@ -2,6 +2,8 @@ from __future__ import unicode_literals
 
 from django.contrib.gis.db import models
 
+import data_models.models as data_models
+
 
 class Municipality(models.Model):
     class Meta:
@@ -12,6 +14,17 @@ class Municipality(models.Model):
     name = models.CharField("Kommunenavn", unique=True, max_length=100)
     admin_code = models.CharField("Kommunekode", unique=True, max_length=5)
     geo_boundary = models.MultiPolygonField(srid=4326, verbose_name="Koordinater")
+
+    @staticmethod
+    def get_stats():
+        res = {}
+        for municipality in Municipality.objects.all():
+            res[municipality.admin_code] = {
+                "nr_houses": data_models.House.objects.filter(
+                    municipality=municipality
+                ).count()
+            }
+        return res
 
     # TODO look at these fields?
     # nr_houses = models.IntegerField("Antal huse")
