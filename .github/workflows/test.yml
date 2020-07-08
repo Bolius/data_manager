@@ -28,7 +28,7 @@ jobs:
       - name: Static error check (Flake8)
         run: docker-compose run web flake8
       - name: Import checks (isort)
-        run: docker-compose run web isort -c
+        run: docker-compose run web isort --check --profile black .
       - name: Generating coverage
         run: docker-compose run web coverage run --source='.' manage.py test
       - name: Converting coverage

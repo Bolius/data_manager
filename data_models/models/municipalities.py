@@ -1,9 +1,10 @@
 from __future__ import unicode_literals
 
-from django.contrib.gis.db import models
 import geojson
+from django.contrib.gis.db import models
 from django.core.serializers import serialize
-import data_models.models as data_models
+
+from data_models import models as data_models
 
 
 class Municipality(models.Model):

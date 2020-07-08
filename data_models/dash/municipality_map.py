@@ -1,8 +1,8 @@
 import dash_core_components as dcc
 import dash_html_components as html
-import plotly.express as px
 from django_plotly_dash import DjangoDash
-import plotly.graph_objects as go
+from plotly import express as px
+
 from data_models.models import Municipality
 
 app = DjangoDash("municipality_map")
