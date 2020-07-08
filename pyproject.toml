@@ -31,7 +31,7 @@ black = "19.10b0"
 flake8 = "3.8.3"
 pydotplus = "2.0.2"
 django-extensions = "3.0.2"
-isort = {extras = ["pyproject"], version= "4.3.21"}
+isort = {extras = ["pyproject"], version= "5.0.5"}
 selenium = "3.141.0"
 bpython = "^0.19"
 whitenoise = "^5.1.0"
