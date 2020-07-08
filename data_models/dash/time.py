@@ -9,8 +9,27 @@ data = BBR.get_time_data()
 rolling_data = BBR.get_rolling_avgs()
 
 
+def categorical_to_traces(categorical, time_range, field):
+    traces = []
+    for key in categorical[0]:
+        traces.append(
+            {
+                "type": "scatter",
+                "visible": "legendonly",
+                "x": time_range,
+                "y": [val[key] for val in categorical],
+                "name": [
+                    name
+                    for (val, name) in BBR._meta.get_field(field).choices
+                    if val == key
+                ][0],
+            }
+        )
+    return traces
+
+
 def get_accumulated_figure():
-    return {
+    fig = {
         "data": [
             {
                 "type": "scatter",
@@ -33,6 +52,43 @@ def get_accumulated_figure():
             "title": "Akkummuleret antal over tid",
         },
     }
+    fig["data"].extend(
+        categorical_to_traces(
+            BBR.accumulated_sum_for_catatgorical(
+                "kitchen_facility", data["time_range"][0], data["time_range"][-1]
+            ),
+            data["time_range"],
+            "kitchen_facility",
+        )
+    )
+    fig["data"].extend(
+        categorical_to_traces(
+            BBR.accumulated_sum_for_catatgorical(
+                "heat_install", data["time_range"][0], data["time_range"][-1]
+            ),
+            data["time_range"],
+            "heat_install",
+        )
+    )
+    fig["data"].extend(
+        categorical_to_traces(
+            BBR.accumulated_sum_for_catatgorical(
+                "roofing_material", data["time_range"][0], data["time_range"][-1]
+            ),
+            data["time_range"],
+            "roofing_material",
+        )
+    )
+    fig["data"].extend(
+        categorical_to_traces(
+            BBR.accumulated_sum_for_catatgorical(
+                "property_type", data["time_range"][0], data["time_range"][-1]
+            ),
+            data["time_range"],
+            "property_type",
+        )
+    )
+    return fig
 
 
 def get_rolling_figure():
@@ -114,7 +170,7 @@ app.layout = html.Div(
                 {"label": "Rullende gennemsnit", "value": "avg"},
                 {"label": "Akkummuleret værdier", "value": "cum"},
             ],
-            value="avg",
+            value="cum",
             labelStyle={"display": "block"},
             style={"textAlign": "center"},
         ),

@@ -13,6 +13,7 @@ from data_models.dash.scatter import app as ScatterVis  # noqa
 
 from data_models.views import (  # predict_improvements,; predict_params,; add_session,; scatter,; map,; time,; colorMap,; mapView,; address_view,
     TimeView,
+    MunicipalityMapView,
     EntryPage,
     scatter,
     map,
@@ -35,11 +36,12 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("", EntryPage, name="entry_page"),
     path("scatter", scatter, name="scatter"),
-    path("mapScatter", map, name="mapS"),
+    path("visualizer/map", map, name="map_visualiser"),
     path("visualizer/time", TimeView, name="time_visualiser"),
     path("graphql/", csrf_exempt(GraphQLView.as_view(graphiql=False))),
     path(r"address/", address_view, name="address"),
     path(r"address/<address>", address_view, name="addressInfo"),
+    path("visualizer/municipalities", MunicipalityMapView, name="muni_map"),
     # path(r"comfortscore/v2/addSession/", add_session, name="addSession"),
     # path(
     #     r"comfortscore/v2/predictParams/<address>/",
@@ -54,5 +56,4 @@ urlpatterns = [
     # path(r"maps/<address>/", mapView, name="maps"),
     # path(r"maps/", mapView, name="maps"),
     # path(r"watercomes/<x>/<y>", water_comes, name="watercomes"),
-    # path("colorMap", colorMap, name="colorMap"),
 ]
