@@ -7,11 +7,13 @@ from numpy import array
 
 from data_models.models import BBR, House, categorical_fields
 from data_models.models import integer_fields as scalar_fields
+from numpy import arange
 
 mapbox_access_token = "pk.eyJ1IjoibWJwaGFtIiwiYSI6ImNqdDVqdGhwbjA2bjIzeW45dDR0MHl6bHAifQ.uxGVk7wDQmmOiwGS15ebjQ"
 app = DjangoDash("MapVis")
 houses = House.objects.all()
 bbr = BBR.objects.all()
+build_years = arange(1800, 2020, 1)
 
 if len(scalar_fields) > 0:
     app.layout = html.Div(
@@ -55,17 +57,18 @@ if len(scalar_fields) > 0:
                         config={"scrollZoom": True},
                         style={"width": "1300px", "margin": "auto"},
                     ),
+                    html.H3("Årstal"),
                     dcc.RangeSlider(
                         id="year--slider",
-                        min=1850,
-                        max=2020,
-                        value=1990,
-                        updatemode="drag",
-                        count=5,
+                        min=min(build_years),
+                        max=max(build_years),
+                        value=[1930],
                         step=5,
                         marks={
                             str(build_year): str(build_year)
-                            for build_year in range(1850, 2020, 10)
+                            for build_year in range(
+                                min(build_years), max(build_years) + 1, 10
+                            )
                         },
                     ),
                 ],
@@ -99,7 +102,7 @@ if len(scalar_fields) > 0:
     )
     def update_map(val, valFrom, valTo, sortBy, yearValue):
         _locals = locals()
-        query = f"hs = House.objects.filter(buldings__{val}__gte={valFrom}, buldings__{val}__lte={valTo})"
+        query = f"hs = House.objects.filter(buldings__{val}__gte={valFrom}, buldings__{val}__lte={valTo}, buldings__construction_year__gte={yearValue[0]}, buldings__construction_year__lte={yearValue[0] + 5})"
 
         exec(
             query, globals(), _locals,

@@ -32,6 +32,10 @@ def MunicipalityMapView(request):
     return render(request, "data_models/municipality_map.html", {})
 
 
+def HistogramView(request):
+    return render(request, "data_models/histogram.html")
+
+
 def address_view(request, address=None):
     if address is not None:
         query = settings.EXPLORATION_QUERY

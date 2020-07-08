@@ -7,6 +7,7 @@ from graphene_django.views import GraphQLView
 
 from data_models.dash.map import app as MapVis  # noqa
 from data_models.dash.scatter import app as ScatterVis  # noqa
+from data_models.dash.histogram import app as HistogramVis  # noqa
 
 # from django.core.management import call_command
 
@@ -18,6 +19,7 @@ from data_models.views import (  # predict_improvements,; predict_params,; add_s
     scatter,
     map,
     address_view,
+    HistogramView,
 )
 
 # """ A dirty hack around plotly loading apps before migrations are applied """
@@ -42,6 +44,7 @@ urlpatterns = [
     path(r"address/", address_view, name="address"),
     path(r"address/<address>", address_view, name="addressInfo"),
     path("visualizer/municipalities", MunicipalityMapView, name="muni_map"),
+    path("visualizer/histogram", HistogramView, name="hist_visualiser")
     # path(r"comfortscore/v2/addSession/", add_session, name="addSession"),
     # path(
     #     r"comfortscore/v2/predictParams/<address>/",
