@@ -1,34 +1,29 @@
 import dash_core_components as dcc
 import dash_html_components as html
-import geojson
 import plotly.express as px
-from django.core.serializers import serialize
 from django_plotly_dash import DjangoDash
-
+import plotly.graph_objects as go
 from data_models.models import Municipality
 
 app = DjangoDash("municipality_map")
 
-data = geojson.loads(
-    serialize(
-        "geojson",
-        Municipality.objects.all(),
-        geometry_field="geo_boundary",
-        fields=("name", "admin_code"),
-    )
-)
+muni_stats = Municipality.get_stats()
 
 fig = px.choropleth_mapbox(
-    [
-        {"admin_code": m.admin_code, "val": int(m.admin_code)}
-        for m in Municipality.objects.all()
-    ],
-    geojson=data,
-    color="val",
+    # [
+    #     {"admin_code": m.admin_code, "val": int(m.admin_code)}
+    #     for m in Municipality.objects.all()
+    # ],
+    muni_stats["data"],
+    geojson=muni_stats["geo_data"],
+    color="nr_houses",
+    color_continuous_scale="Viridis",
     locations="admin_code",
     featureidkey="properties.admin_code",
     center={"lat": 56.5331075, "lon": 11.8389737},
     mapbox_style="carto-positron",
+    labels={"nr_houses": "Antal huse", "name": "Kommune"},
+    # text=lambda x: "hej",
     zoom=4.95,
 )
 

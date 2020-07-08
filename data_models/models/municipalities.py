@@ -1,7 +1,8 @@
 from __future__ import unicode_literals
 
 from django.contrib.gis.db import models
-
+import geojson
+from django.core.serializers import serialize
 import data_models.models as data_models
 
 
@@ -17,13 +18,29 @@ class Municipality(models.Model):
 
     @staticmethod
     def get_stats():
-        res = {}
-        for municipality in Municipality.objects.all():
-            res[municipality.admin_code] = {
-                "nr_houses": data_models.House.objects.filter(
-                    municipality=municipality
-                ).count()
-            }
+        res = {
+            "geo_data": geojson.loads(
+                serialize(
+                    "geojson",
+                    Municipality.objects.all(),
+                    geometry_field="geo_boundary",
+                    fields=("name", "admin_code"),
+                )
+            ),
+            "data": [],
+        }
+        municipalities = Municipality.objects.all()
+
+        for municipality in municipalities:
+            res["data"].append(
+                {
+                    "admin_code": municipality.admin_code,
+                    "name": municipality.name,
+                    "nr_houses": data_models.House.objects.filter(
+                        municipality=municipality
+                    ).count(),
+                }
+            )
         return res
 
     # TODO look at these fields?

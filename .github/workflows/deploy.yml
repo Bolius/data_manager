@@ -18,21 +18,6 @@ jobs:
           repository: rotendahl/bolius
           tag_with_sha: true
           tag_with_ref: true
-      - uses: technote-space/auto-cancel-redundant-job@v1
-      - name: Setup Enviroment
-        run: cp .env.example .env
-      - name: Builds the stack
-        run: docker-compose build
-      - name: Generating coverage
-        run: docker-compose run web coverage run --source='.' manage.py test
-      - name: Converting coverage
-        run: docker-compose run web coverage xml
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v1.0.10
-        with:
-          token:  ${{ secrets.code_cov_token }}
-          file: ./coverage.xml
-
 
   coverage:
   name: Build and Push Docker image to GitHub Packages
@@ -51,5 +36,5 @@ jobs:
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v1.0.10
       with:
-        token:  ${{ secrets.code_cov_token }}
+        token: ${{ secrets.code_cov_token }}
         file: ./coverage.xml
