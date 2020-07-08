@@ -18,7 +18,7 @@ jobs:
           repository: rotendahl/bolius
           tag_with_sha: true
           tag_with_ref: true
-          - uses: technote-space/auto-cancel-redundant-job@v1
+      - uses: technote-space/auto-cancel-redundant-job@v1
       - name: Setup Enviroment
         run: cp .env.example .env
       - name: Builds the stack
