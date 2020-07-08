@@ -5,8 +5,8 @@ import plotly.graph_objs as go
 from django_plotly_dash import DjangoDash
 from numpy import arange
 
-from data_models.models import BBR, Municipality, House
-from data_models.models import integer_fields as scalar_fields, categorical_fields
+from data_models.models import BBR, House, Municipality, categorical_fields
+from data_models.models import integer_fields as scalar_fields
 
 external_stylesheets = ["https://codepen.io/chriddyp/pen/bWLwgP.css"]
 app = DjangoDash("HistogramVis", external_stylesheets=external_stylesheets)

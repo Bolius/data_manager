@@ -1,11 +1,11 @@
 from .entry_page_view import EntryPage
 from .visualizer_views import (
+    HistogramView,
     MunicipalityMapView,
     TimeView,
     address_view,
     map,
     scatter,
-    HistogramView,
 )
 
 __all__ = [
