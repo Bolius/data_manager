@@ -9,10 +9,12 @@ class CityTest(TestCase):
     def test_add_house_by_kvhx(self):
         kvhx = "05610484_103_______"
         self.assertEqual(House.objects.all().count(), 0)
-        house = House.add_house_by_kvhx(kvhx)
+        house = House.add_house(kvhx=kvhx)
         self.assertEqual(House.objects.all().count(), 1)
         self.assertEqual(house.zip_code, 6771)
         self.assertEqual(house.address, "Kjærmarken 103, 6771 Gredstedbro")
+        self.assertEqual(house.municipality.name, "Esbjerg")
+        house.delete()
 
     def test_add_houses(self):
         nr_houses = 10

@@ -45,7 +45,7 @@ categorical_fields = [
 
 class BBR(models.Model):  # TODO Rename to bulding / house
     accsses_address = models.ForeignKey(
-        "House", on_delete=models.PROTECT, related_name="buldings"
+        "House", on_delete=models.CASCADE, related_name="buldings"
     )
     construction_year = models.IntegerField("Byggeår")
     reconstruction_year = models.IntegerField("Renoveringsår", null=True, blank=True)
