@@ -24,6 +24,10 @@ class MunicipalityTest(TestCase):
 
     def test_get_stats(self):
         stats = Municipality.get_stats()
-        self.assertEqual(stats[self.h1.municipality.admin_code]["nr_houses"], 1)
-        self.assertEqual(stats[self.h2.municipality.admin_code]["nr_houses"], 1)
-        self.assertEqual(len(stats), self.TOTAL_MUNICIPALITIES)
+        self.assertEqual(
+            stats["data"].loc[self.h2.municipality.admin_code, "nr_houses"], 1
+        )
+        self.assertEqual(
+            stats["data"].loc[self.h2.municipality.admin_code, "nr_houses"], 1
+        )
+        self.assertEqual(len(stats["data"]), self.TOTAL_MUNICIPALITIES)

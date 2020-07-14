@@ -1,6 +1,7 @@
 from random import randint
 
 import factory
+
 from data_models.models import Suggestion
 
 
