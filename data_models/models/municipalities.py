@@ -2,9 +2,12 @@ from __future__ import unicode_literals
 
 import geojson
 from django.contrib.gis.db import models
+from django.db.models import Avg
 from django.core.serializers import serialize
-
+from datetime import date
 from data_models import models as data_models
+import pandas as pd
+from .bbr import BBR
 
 
 class Municipality(models.Model):
@@ -33,6 +36,16 @@ class Municipality(models.Model):
         municipalities = Municipality.objects.all()
 
         for municipality in municipalities:
+            buldings_in_muni = BBR.objects.filter(
+                accsses_address__municipality=municipality
+            )
+            averages = buldings_in_muni.aggregate(
+                Avg("construction_year"), Avg("building_area")
+            )
+            avg_construction = averages["construction_year__avg"]
+            avg_construction = (
+                0 if avg_construction is None else date.today().year - avg_construction
+            )
             res["data"].append(
                 {
                     "admin_code": municipality.admin_code,
@@ -40,8 +53,11 @@ class Municipality(models.Model):
                     "nr_houses": data_models.House.objects.filter(
                         municipality=municipality
                     ).count(),
+                    "average_age": avg_construction,
+                    "average_size": averages["building_area__avg"],
                 }
             )
+        res["data"] = pd.DataFrame(res["data"])
         return res
 
     # TODO look at these fields?

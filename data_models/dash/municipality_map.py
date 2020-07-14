@@ -1,7 +1,8 @@
 import dash_core_components as dcc
 import dash_html_components as html
 from django_plotly_dash import DjangoDash
-from plotly import express as px
+import plotly.graph_objects as go
+from dash.dependencies import Input, Output
 
 from data_models.models import Municipality
 
@@ -9,38 +10,49 @@ app = DjangoDash("municipality_map")
 
 muni_stats = Municipality.get_stats()
 
-fig = px.choropleth_mapbox(
-    # [
-    #     {"admin_code": m.admin_code, "val": int(m.admin_code)}
-    #     for m in Municipality.objects.all()
-    # ],
-    muni_stats["data"],
-    geojson=muni_stats["geo_data"],
-    color="nr_houses",
-    color_continuous_scale="Viridis",
-    locations="admin_code",
-    featureidkey="properties.admin_code",
-    center={"lat": 56.5331075, "lon": 11.8389737},
-    mapbox_style="carto-positron",
-    labels={"nr_houses": "Antal huse", "name": "Kommune"},
-    # text=lambda x: "hej",
-    zoom=4.95,
+
+fig = go.Figure(
+    go.Choroplethmapbox(
+        geojson=muni_stats["geo_data"],
+        locations=muni_stats["data"].admin_code,
+        z=muni_stats["data"]["average_age"],
+        colorscale="Viridis",
+        marker_opacity=0.5,
+        marker_line_width=0,
+        featureidkey="properties.admin_code",
+        colorbar_title_text="Antal huse",
+        hovertemplate="%{properties.name}<br />Antal Huse: %{z}<extra></extra>",
+    )
 )
+fig.update_layout(
+    title="Kommunekort",
+    mapbox_style="carto-positron",
+    mapbox_zoom=5.8,
+    mapbox_center={"lat": 56.1331075, "lon": 11.8389737},
+    margin={"l": 20, "r": 20, "t": 30, "b": 20},
+)
+
+paramter_mapping = {
+    "average_size": "Gennemsnits størrelse",
+    "average_age": "Gennemsnits alder",
+    "nr_houses": "Antal huse",
+}
 
 app.layout = html.Div(
     children=[
-        dcc.Markdown(
-            """
-        ## Kommunekort
-        På denne side kan du se hvordan tendenser har udvikliet sig i hver
-        kommune.
-        """
-        ),
         dcc.Graph(
             id="color-map",
             config={"scrollZoom": True},
-            style={"height": "90%", "border": "1px solid grey"},
+            style={"height": "100%"},
             figure=fig,
+        ),
+        dcc.Dropdown(
+            id="paramater-dropdown",
+            options=[
+                {"label": paramter_mapping[key], "value": key}
+                for key in paramter_mapping
+            ],
+            value="nr_houses",
         ),
     ],
     style={
@@ -50,3 +62,32 @@ app.layout = html.Div(
         "margin-right": "auto",
     },
 )
+
+
+@app.callback(
+    Output("color-map", "figure"), [Input("paramater-dropdown", "value")],
+)
+def update_output(value):
+    fig = go.Figure(
+        go.Choroplethmapbox(
+            geojson=muni_stats["geo_data"],
+            locations=muni_stats["data"].admin_code,
+            z=muni_stats["data"][value],
+            colorscale="Viridis",
+            marker_opacity=0.5,
+            marker_line_width=0,
+            featureidkey="properties.admin_code",
+            colorbar_title_text=paramter_mapping[value],
+            hovertemplate="Kommune: %{properties.name}<br />"
+            + paramter_mapping[value]
+            + ": %{z:.1f}<extra></extra>",
+        )
+    )
+    fig.update_layout(
+        title="Kommunekort",
+        mapbox_style="carto-positron",
+        mapbox_zoom=5.8,
+        mapbox_center={"lat": 56.1331075, "lon": 11.8389737},
+        margin={"l": 20, "r": 20, "t": 30, "b": 20},
+    )
+    return fig
