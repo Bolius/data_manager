@@ -1,12 +1,15 @@
 from __future__ import unicode_literals
 
-import geojson
-from django.contrib.gis.db import models
-from django.db.models import Avg
-from django.core.serializers import serialize
 from datetime import date
-from data_models import models as data_models
+
+import geojson
 import pandas as pd
+from django.contrib.gis.db import models
+from django.core.serializers import serialize
+from django.db.models import Avg
+
+from data_models import models as data_models
+
 from .bbr import BBR
 
 
@@ -58,6 +61,7 @@ class Municipality(models.Model):
                 }
             )
         res["data"] = pd.DataFrame(res["data"])
+        res["data"].index = res["data"]["admin_code"]
         return res
 
     # TODO look at these fields?
