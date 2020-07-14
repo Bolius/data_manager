@@ -7,7 +7,6 @@ from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 
 from .functional_test_helpers import get_text_contains
 
-
 """
 This test checks that the front page can be loaded without problems
 """

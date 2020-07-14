@@ -1,8 +1,16 @@
 from __future__ import unicode_literals
 
-from django.contrib.gis.db import models
+from datetime import date
 
-import data_models.models as data_models
+import geojson
+import pandas as pd
+from django.contrib.gis.db import models
+from django.core.serializers import serialize
+from django.db.models import Avg
+
+from data_models import models as data_models
+
+from .bbr import BBR
 
 
 class Municipality(models.Model):
@@ -17,13 +25,43 @@ class Municipality(models.Model):
 
     @staticmethod
     def get_stats():
-        res = {}
-        for municipality in Municipality.objects.all():
-            res[municipality.admin_code] = {
-                "nr_houses": data_models.House.objects.filter(
-                    municipality=municipality
-                ).count()
-            }
+        res = {
+            "geo_data": geojson.loads(
+                serialize(
+                    "geojson",
+                    Municipality.objects.all(),
+                    geometry_field="geo_boundary",
+                    fields=("name", "admin_code"),
+                )
+            ),
+            "data": [],
+        }
+        municipalities = Municipality.objects.all()
+
+        for municipality in municipalities:
+            buldings_in_muni = BBR.objects.filter(
+                accsses_address__municipality=municipality
+            )
+            averages = buldings_in_muni.aggregate(
+                Avg("construction_year"), Avg("building_area")
+            )
+            avg_construction = averages["construction_year__avg"]
+            avg_construction = (
+                0 if avg_construction is None else date.today().year - avg_construction
+            )
+            res["data"].append(
+                {
+                    "admin_code": municipality.admin_code,
+                    "name": municipality.name,
+                    "nr_houses": data_models.House.objects.filter(
+                        municipality=municipality
+                    ).count(),
+                    "average_age": avg_construction,
+                    "average_size": averages["building_area__avg"],
+                }
+            )
+        res["data"] = pd.DataFrame(res["data"])
+        res["data"].index = res["data"]["admin_code"]
         return res
 
     # TODO look at these fields?

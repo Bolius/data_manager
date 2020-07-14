@@ -1,8 +1,7 @@
 import geojson
+import geopandas as gpd
 import pandas as pd
 from numpy import array
-
-import geopandas as gpd
 
 kommuner = "kommuner.geojson"
 befolkning = "kommunerBefolking.geojson"
