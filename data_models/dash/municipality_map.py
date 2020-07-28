@@ -63,14 +63,6 @@ app.layout = html.Div(
                 "height": "90%",
             },
         ),
-        dcc.Dropdown(
-            id="paramater-dropdown",
-            options=[
-                {"label": paramter_mapping[key], "value": key}
-                for key in paramter_mapping
-            ],
-            value="nr_houses",
-        ),
     ],
     style={
         "width": "100%",
