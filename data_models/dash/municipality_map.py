@@ -11,12 +11,6 @@ app = DjangoDash("municipality_map")
 muni_stats = Municipality.get_stats()
 
 
-paramter_mapping = {
-    "average_size": "Gennemsnits størrelse",
-    "average_age": "Gennemsnits alder",
-    "nr_houses": "Antal huse",
-}
-
 app.layout = html.Div(
     children=[
         html.Div(
@@ -68,6 +62,14 @@ app.layout = html.Div(
                 "justifyContent": "space-between",
                 "height": "90%",
             },
+        ),
+        dcc.Dropdown(
+            id="paramater-dropdown",
+            options=[
+                {"label": paramter_mapping[key], "value": key}
+                for key in paramter_mapping
+            ],
+            value="nr_houses",
         ),
     ],
     style={

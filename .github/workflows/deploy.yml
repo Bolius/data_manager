@@ -33,7 +33,7 @@ jobs:
       - name: Converting coverage
         run: docker-compose run web coverage xml
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v1.0.10
+        uses: codecov/codecov-action@v1.0.12
         with:
           token: '${{ secrets.code_cov_token }}'
           file: ./coverage.xml
