@@ -1,12 +1,10 @@
 from __future__ import unicode_literals
 
-from datetime import date
-
 import geojson
 import pandas as pd
 from django.contrib.gis.db import models
 from django.core.serializers import serialize
-from django.db.models import Avg
+from django.db.models import Avg, Count
 
 from data_models import models as data_models
 
@@ -35,19 +33,16 @@ class Municipality(models.Model):
                 )
             ),
             "data": [],
+            "categorical": {},
         }
         municipalities = Municipality.objects.all()
-
+        muni_averages = []
         for municipality in municipalities:
             buldings_in_muni = BBR.objects.filter(
                 accsses_address__municipality=municipality
             )
             averages = buldings_in_muni.aggregate(
-                Avg("construction_year"), Avg("building_area")
-            )
-            avg_construction = averages["construction_year__avg"]
-            avg_construction = (
-                0 if avg_construction is None else date.today().year - avg_construction
+                *[Avg(int_field) for int_field in BBR.integer_fields]
             )
             res["data"].append(
                 {
@@ -56,23 +51,16 @@ class Municipality(models.Model):
                     "nr_houses": data_models.House.objects.filter(
                         municipality=municipality
                     ).count(),
-                    "average_age": avg_construction,
-                    "average_size": averages["building_area__avg"],
                 }
             )
+            muni_averages.append(averages)
+            res["categorical"][municipality.admin_code] = {}
+            for cat_field in BBR.categorical_fields:
+                res["categorical"][municipality.admin_code][
+                    cat_field
+                ] = buldings_in_muni.values(cat_field).annotate(count=Count(cat_field))
+
+        res["muni_averages"] = pd.DataFrame(muni_averages)
         res["data"] = pd.DataFrame(res["data"])
         res["data"].index = res["data"]["admin_code"]
         return res
-
-    # TODO look at these fields?
-    # nr_houses = models.IntegerField("Antal huse")
-    # basements = models.FloatField("Antal huse med kælder")
-    # avg_size = models.FloatField("Gnst størrelse")
-    # avg_nr_rooms = models.FloatField("Gnst antal værelser")
-    # avg_build_year = models.IntegerField("Gnst byggeår", null=True)
-    # subscript_email = models.IntegerField("Tilmeldt - email", null=True)
-    # subscript_garden = models.IntegerField("Tilmeldt - have", null=True)
-    # subscript_save_energy = models.IntegerField("Tilmeldt - sparenergi", null=True)
-    # subscript_climate = models.IntegerField("Tilmeldt - indeklima", null=True)
-    # subscript_competition = models.IntegerField("Tilmeldt - konkurrencer", null=True)
-    # subscript_cleaning = models.IntegerField("Tilmeldt - rengøring", null=True)
