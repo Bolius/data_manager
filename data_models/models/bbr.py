@@ -17,7 +17,8 @@ from .categoricalMapper import (
     WATER_SUPPLY_CHOICES,
 )
 
-integer_fields = [
+integer_fields = [  # TODO remove this
+    "construction_year__avg",
     "building_area",
     "ground_area",
     "garage_area",
@@ -28,7 +29,7 @@ integer_fields = [
     "other_area",
 ]
 
-categorical_fields = [
+categorical_fields = [  # TODO remove this
     "heat_install",
     "heat_type",
     "heat_supply",
@@ -44,6 +45,31 @@ categorical_fields = [
 
 
 class BBR(models.Model):  # TODO Rename to bulding / house
+    integer_fields = [
+        "construction_year",
+        "building_area",
+        "ground_area",
+        "garage_area",
+        "carport_area",
+        "outhouse_area",
+        "roof_area",
+        "commercial_area",
+        "other_area",
+    ]
+    categorical_fields = [  # TODO remove this
+        "heat_install",
+        "heat_type",
+        "heat_supply",
+        "water_supply",
+        "wall_material",
+        # "energy_supply",
+        "roofing_material",
+        "property_type",
+        "kitchen_facility",
+        "toilet_facility",
+        "bathing_facility",
+    ]
+
     accsses_address = models.ForeignKey(
         "House", on_delete=models.CASCADE, related_name="buldings"
     )
@@ -65,42 +91,71 @@ class BBR(models.Model):  # TODO Rename to bulding / house
 
     # TODO set to choicefield
     heat_install = models.CharField(
-        max_length=2, choices=HEAT_INSTALL_CHOICES, null=True
+        "Primær varmeinstallation",
+        max_length=2,
+        choices=HEAT_INSTALL_CHOICES,
+        null=True,
     )
-    heat_type = models.CharField(max_length=2, choices=HEAT_TYPE_CHOICES, null=True)
+    heat_type = models.CharField(
+        "Primært Opvarmningsmiddel", max_length=2, choices=HEAT_TYPE_CHOICES, null=True
+    )
 
     heat_supply = models.CharField(
-        max_length=2, choices=HEAT_SUPPLY_INSTALL_CHOICES, null=True
+        "Supplerende Varmekilde",
+        max_length=2,
+        choices=HEAT_SUPPLY_INSTALL_CHOICES,
+        null=True,
     )
     water_supply = models.CharField(
-        max_length=2, choices=WATER_SUPPLY_CHOICES, null=True,
+        "Vandforsyning", max_length=2, choices=WATER_SUPPLY_CHOICES, null=True,
     )
     wall_material = models.CharField(
-        max_length=2, choices=WALL_MATERIAL_CHOICES, null=True,
+        "Ydervægs Materiale", max_length=2, choices=WALL_MATERIAL_CHOICES, null=True,
     )
 
     roofing_material = models.CharField(
-        max_length=2, choices=ROOFING_MATERIAL_CHOICES, null=True,
+        "Tagdækningsmateriale",
+        max_length=2,
+        choices=ROOFING_MATERIAL_CHOICES,
+        null=True,
     )
 
     property_type = models.CharField(
-        max_length=2, choices=PROPERTY_TYPE_CHOICES, null=True,
+        "Boligtype", max_length=2, choices=PROPERTY_TYPE_CHOICES, null=True,
     )
 
     kitchen_facility = models.CharField(
-        max_length=2, choices=KITCHEN_FACILITY, null=True,
+        "køkkenforhold", max_length=2, choices=KITCHEN_FACILITY, null=True,
     )
 
     toilet_facility = models.CharField(
-        max_length=2, choices=TOILET_FACILITY, null=True,
+        "Toiletforhold", max_length=2, choices=TOILET_FACILITY, null=True,
     )
 
     bathing_facility = models.CharField(
-        max_length=2, choices=BATHING_FACILITY, null=True
+        "badeforhold", max_length=2, choices=BATHING_FACILITY, null=True
     )
 
     def __str__(self):
         return f"BBR oplysninger for {self.accsses_address}"
+
+    @staticmethod
+    def field_to_desc(field_name):
+        field_name = field_name.replace("__avg", "")
+        return [
+            field.verbose_name
+            for field in BBR._meta.concrete_fields
+            if field.name == field_name
+        ][0]
+
+    @staticmethod
+    def choice_to_desc(field_name, choice):
+        choices = [
+            field.choices
+            for field in BBR._meta.concrete_fields
+            if field.name == field_name
+        ][0]
+        return [desc for val, desc in choices if val == str(choice)][0]
 
     @staticmethod
     def add_buldings(house):
