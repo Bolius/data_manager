@@ -17,7 +17,7 @@ jobs:
         run: docker-compose build
       - name: Test
         run: docker-compose run web ./manage.py test
-      - uses: actions/upload-artifact@v2.0.1
+      - uses: actions/upload-artifact@2.1.0
         if: always()
         with:
           name: selenium-screens
@@ -28,19 +28,19 @@ jobs:
       - name: Static error check (Flake8)
         run: docker-compose run web flake8
       - name: Import checks (isort)
-        run: docker-compose run web isort -c
+        run: docker-compose run web isort --check --profile black .
       - name: Generating coverage
         run: docker-compose run web coverage run --source='.' manage.py test
       - name: Converting coverage
         run: docker-compose run web coverage xml
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v1.0.10
+        uses: codecov/codecov-action@v1.0.12
         with:
           token:  ${{ secrets.code_cov_token }}
           file: ./coverage.xml
       - name: Create and upload UML diagram
         run: mkdir -p UML && docker-compose run web ./manage.py graph_models data_models -o UML/UML_diagram.png
-      - uses: actions/upload-artifact@v2.0.1
+      - uses: actions/upload-artifact@2.1.0
         with:
           name: UML_diagram.png
           path: UML

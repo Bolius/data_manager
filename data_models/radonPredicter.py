@@ -1,6 +1,5 @@
-import pandas as pd
-
 import geopandas as geo_pd
+import pandas as pd
 from radon_notebooks.data_processing import one_hot_encode
 from shapely.geometry import Point
 from sklearn.externals import joblib

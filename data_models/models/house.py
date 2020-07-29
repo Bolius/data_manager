@@ -40,7 +40,8 @@ class House(geo_models.Model):  # TODO rename house address
             if len(houses) > 0:
                 return houses[0]
             data = access_id_to_address(access_id)
-
+        if len(houses := House.objects.filter(address=data["adressebetegnelse"])) > 0:
+            return houses[0]
         house = House()
         house.dawa_id = data["id"]
         house.access_id = data["adgangsadresse"]["id"]

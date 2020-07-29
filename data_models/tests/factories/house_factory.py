@@ -20,6 +20,8 @@ def add_houses(nr_houses=100, page_nr=None):
             "anvendelseskode": "120",
         },
     )
+    if response.status_code != 200:
+        raise ValueError(response)
     created_houses = []
     for house_bulding in tqdm(response.json(), desc="Adding houses"):
         created_houses.append(House.add_house(access_id=house_bulding["EnhAdr_id"]))
