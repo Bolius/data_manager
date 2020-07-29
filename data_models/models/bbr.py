@@ -5,6 +5,8 @@ from numpy import array, unique
 from data_models.api_wrappers import dawa_id_to_bbr
 
 from .categoricalMapper import (
+    ENERGY_SUPPLY_CHOICES,
+    RECIDENTIAL_TYPE_CHOICES,
     BATHING_FACILITY,
     HEAT_INSTALL_CHOICES,
     HEAT_SUPPLY_INSTALL_CHOICES,
@@ -61,12 +63,13 @@ class BBR(models.Model):  # TODO Rename to bulding / house
         "heat_supply",
         "water_supply",
         "wall_material",
-        # "energy_supply",
+        "energy_type",
         "roofing_material",
         "property_type",
         "kitchen_facility",
         "toilet_facility",
         "bathing_facility",
+        "residential_type",
     ]
 
     accsses_address = models.ForeignKey(
@@ -89,6 +92,13 @@ class BBR(models.Model):  # TODO Rename to bulding / house
     num_rooms = models.IntegerField("Antal værelser")
 
     # TODO set to choicefield
+    residential_type = models.CharField(
+        "Boligtype", max_length=7, choices=RECIDENTIAL_TYPE_CHOICES
+    )
+
+    energy_type = models.CharField(
+        "Primær Energiforsyning", max_length=2, choices=ENERGY_SUPPLY_CHOICES
+    )
     heat_install = models.CharField(
         "Primær varmeinstallation",
         max_length=2,
@@ -178,7 +188,7 @@ class BBR(models.Model):  # TODO Rename to bulding / house
         building.num_baths = data["AntBadevaerelser"]
         building.num_toilets = data["AntVandskylToilleter"]
         building.commercial_area = data["ENH_ERHV_ARL"]
-
+        building.residential_type = data["ENH_ANVEND_KODE"]
         building.heat_install = data["bygning"]["VARMEINSTAL_KODE"]
         building.heat_type = data["bygning"]["OPVARMNING_KODE"]
         building.heat_supply = data["bygning"]["VARME_SUPPL_KODE"]

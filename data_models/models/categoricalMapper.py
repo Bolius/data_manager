@@ -127,9 +127,10 @@ BATHING_FACILITY = [
 
 
 RECIDENTIAL_TYPE_CHOICES = [  # TODO add this
-    ("one_fam", "Enfamiliehuse"),
-    ("farm", "Stuehuse til landbrug"),
-    ("row", "Række/kæde-huse"),
+    ("120", "Enfamiliehuse"),
+    ("110", "Stuehuse til landbrug"),
+    ("130", "Række/kæde-huse"),
+    ("132", "Dobbelthus (to boliger med lodret adskillelse mellem enhederne)"),
     ("multi", "Dobbelt-/flerfamiliehuse"),
     ("story", "Etageboliger"),
     ("oth", "Anden, herunder kollegier"),
