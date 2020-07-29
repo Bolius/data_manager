@@ -69,7 +69,6 @@ class Municipality(models.Model):
                     count=Count(cat_field)
                 )
                 for c in counts:
-                    print(c)
                     res["categorical"][municipality.admin_code][cat_field][
                         c[cat_field]
                     ] += c["count"]
