@@ -2,7 +2,7 @@ import dash
 import dash_core_components as dcc
 import dash_html_components as html
 from django_plotly_dash import DjangoDash
-from numpy import array
+from numpy import arange, array
 from plotly import graph_objs as go
 
 from data_models.models import BBR, House, categorical_fields
