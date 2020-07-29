@@ -97,7 +97,10 @@ class BBR(models.Model):  # TODO Rename to bulding / house
     )
 
     energy_type = models.CharField(
-        "Primær Energiforsyning", max_length=2, choices=ENERGY_SUPPLY_CHOICES
+        "Primær Energiforsyning",
+        max_length=2,
+        choices=ENERGY_SUPPLY_CHOICES,
+        default="0",
     )
     heat_install = models.CharField(
         "Primær varmeinstallation",
@@ -106,7 +109,11 @@ class BBR(models.Model):  # TODO Rename to bulding / house
         null=True,
     )
     heat_type = models.CharField(
-        "Primært Opvarmningsmiddel", max_length=2, choices=HEAT_TYPE_CHOICES, null=True
+        "Primært Opvarmningsmiddel",
+        max_length=2,
+        choices=HEAT_TYPE_CHOICES,
+        null=True,
+        default="0",
     )
 
     heat_supply = models.CharField(
@@ -188,10 +195,14 @@ class BBR(models.Model):  # TODO Rename to bulding / house
         building.num_baths = data["AntBadevaerelser"]
         building.num_toilets = data["AntVandskylToilleter"]
         building.commercial_area = data["ENH_ERHV_ARL"]
+
+        building.energy_type = "0" if (val := data["ENERGI_KODE"]) is None else val
         building.residential_type = data["ENH_ANVEND_KODE"]
         building.heat_install = data["bygning"]["VARMEINSTAL_KODE"]
-        building.heat_type = data["bygning"]["OPVARMNING_KODE"]
-        building.heat_supply = data["bygning"]["VARME_SUPPL_KODE"]
+        building.heat_type = (
+            "0" if (val := data["bygning"]["OPVARMNING_KODE"]) is None else val
+        )
+        building.heat_supply = "0" if (val := data["VARME_SUPPL_KODE"]) is None else val
         building.water_supply = data["bygning"]["BYG_VANDFORSY_KODE"]
         building.wall_material = data["bygning"]["YDERVAEG_KODE"]
         building.roofing_material = data["bygning"]["TAG_KODE"]
