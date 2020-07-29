@@ -18,7 +18,6 @@ from .categoricalMapper import (
 )
 
 integer_fields = [  # TODO remove this
-    "construction_year__avg",
     "building_area",
     "ground_area",
     "garage_area",
@@ -56,7 +55,7 @@ class BBR(models.Model):  # TODO Rename to bulding / house
         "commercial_area",
         "other_area",
     ]
-    categorical_fields = [  # TODO remove this
+    categorical_fields = [
         "heat_install",
         "heat_type",
         "heat_supply",

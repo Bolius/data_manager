@@ -117,11 +117,12 @@ def update_bar(municipality, cat_field):
     muni_name = municipality["points"][0]["customdata"]
     municipality = municipality["points"][0]["location"]
     field_names = [
-        BBR.choice_to_desc(cat_field, field[cat_field])
+        BBR.choice_to_desc(cat_field, field)
         for field in muni_stats["categorical"][municipality][cat_field]
     ]
     counts = [
-        field["count"] for field in muni_stats["categorical"][municipality][cat_field]
+        muni_stats["categorical"][municipality][cat_field][field]
+        for field in muni_stats["categorical"][municipality][cat_field]
     ]
     fig = go.Figure([go.Bar(x=field_names, y=counts)])
     fig.update_layout(
