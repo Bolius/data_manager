@@ -6,7 +6,7 @@ authors = ["Benjamin Rotendahl <Benjamin@Rotendahl.dk>"]
 
 [tool.poetry.dependencies]
 python = "^3.8"
-django = "3.0.7"
+django = "3.1"
 environs = "8.0.0"
 gunicorn = "20.0.4"
 matplotlib = "3.2.1"
