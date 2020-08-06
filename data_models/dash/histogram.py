@@ -1,6 +1,8 @@
 import dash
 import dash_core_components as dcc
 import dash_html_components as html
+import json
+import numpy as np
 from django_plotly_dash import DjangoDash
 from numpy import arange
 from plotly import graph_objs as go
@@ -13,6 +15,16 @@ app = DjangoDash("HistogramVis", external_stylesheets=external_stylesheets)
 build_years = arange(1800, 2020, 1)
 municipalities = Municipality.objects.all()
 houses = House.objects.all()
+
+
+styles = {
+    "pre": {
+        "border": "thin lightgrey solid",
+        "overflowX": "scroll",
+        "margin": "auto",
+        "width": "80%",
+    }
+}
 
 if len(scalar_fields) > 0:
     app.layout = html.Div(
@@ -27,7 +39,8 @@ if len(scalar_fields) > 0:
                             dcc.Dropdown(
                                 id="xaxis",
                                 options=[
-                                    {"label": s, "value": s} for s in scalar_fields
+                                    {"label": s, "value": s, "somedata": s}
+                                    for s in scalar_fields
                                 ],
                                 value=scalar_fields[0],
                             ),
@@ -105,10 +118,21 @@ if len(scalar_fields) > 0:
                     "margin": "auto",
                 },
             ),
-            html.Div(id="hover-data", style={"margin": "auto"}),
             html.Div(
-                [html.Div(id="table"), dcc.Graph(id="indicator-graphic")],
+                [html.Div(id="table"), dcc.Graph(id="indicator-graphic",)],
                 style={"width": "80%", "margin": "auto"},
+            ),
+            html.Div(
+                # id="hover-data",
+                [
+                    dcc.Markdown(
+                        """
+                    **Hold markøren over en søjle for at se information**
+                """,
+                        style={"width": "80%", "margin": "auto"},
+                    ),
+                    html.Pre(id="hover-data", style=styles["pre"]),
+                ]
             ),
         ]
     )
@@ -122,6 +146,18 @@ if len(scalar_fields) > 0:
 
         bbr = _locals.get("hs")
         return len(bbr)
+
+    def get_hover_data(categories, house_filtered=None):
+        if house_filtered is None:
+            house_filtered = houses
+
+        hover1 = np.array(categories)
+
+        # Total number of houses for municipality
+        hover2 = np.array([len(house_filtered)] * len(categories)).reshape(
+            len(categories), 1
+        )
+        return np.append(hover1, hover2, axis=1)
 
     @app.callback(
         dash.dependencies.Output("indicator-graphic", "figure"),
@@ -137,7 +173,10 @@ if len(scalar_fields) > 0:
     def update_graph(xParam, xType, valFromX, valToX, muniChoice, categoryChoice):
 
         cats = BBR._meta.get_field(categoryChoice).choices
+        # get each category
         x = [c[1] for c in cats]
+
+        hover_data = get_hover_data(cats)
 
         data = [
             {
@@ -148,6 +187,7 @@ if len(scalar_fields) > 0:
                 ],
                 "type": "bar",
                 "name": "Danmark",
+                "customdata": hover_data,
             }
         ]
 
@@ -157,7 +197,10 @@ if len(scalar_fields) > 0:
 
                 y = [get_sum(hs, categoryChoice, c[0]) / len(hs) * 100 for c in cats]
 
-                data.append({"x": x, "y": y, "type": "bar", "name": m})
+                hover_data = get_hover_data(cats, hs)
+                data.append(
+                    {"x": x, "y": y, "type": "bar", "name": m, "customdata": hover_data}
+                )
 
         plot = {
             "data": data,
@@ -171,7 +214,6 @@ if len(scalar_fields) > 0:
                     "range": [0, 100],
                 },
                 hovermode="closest",
-                hoverData={},
                 paper_bgcolor="rgb(243, 243, 243)",
                 plot_bgcolor="rgb(243, 243, 243)",
             ),
@@ -183,5 +225,4 @@ if len(scalar_fields) > 0:
         [dash.dependencies.Input("indicator-graphic", "hoverData")],
     )
     def display_hover_data(hoverData):
-        print(hoverData)
-        return html.P("hej")
+        return json.dumps(hoverData, indent=2)
