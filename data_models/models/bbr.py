@@ -18,7 +18,6 @@ from .categoricalMapper import (
 )
 
 integer_fields = [  # TODO remove this
-    "construction_year__avg",
     "building_area",
     "ground_area",
     "garage_area",

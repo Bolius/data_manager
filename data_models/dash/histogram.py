@@ -12,6 +12,7 @@ external_stylesheets = ["https://codepen.io/chriddyp/pen/bWLwgP.css"]
 app = DjangoDash("HistogramVis", external_stylesheets=external_stylesheets)
 build_years = arange(1800, 2020, 1)
 municipalities = Municipality.objects.all()
+houses = House.objects.all()
 
 if len(scalar_fields) > 0:
     app.layout = html.Div(
@@ -45,7 +46,7 @@ if len(scalar_fields) > 0:
                                         value="99999999",
                                     ),
                                 ],
-                                style={"margin-left": "auto", "margin-right": "auto"},
+                                style={"margin": "auto"},
                             ),
                             dcc.RadioItems(
                                 id="xaxis-type",
@@ -56,7 +57,11 @@ if len(scalar_fields) > 0:
                                 labelStyle={"display": "inline-block"},
                             ),
                         ],
-                        style={"width": "33%", "display": "inline-block"},
+                        style={
+                            "width": "33%",
+                            "display": "inline-block",
+                            "margin": "auto",
+                        },
                     ),
                     html.Div(
                         [
@@ -71,7 +76,7 @@ if len(scalar_fields) > 0:
                                     for muni in municipalities
                                 ],
                                 multi=True,
-                                value=[municipalities[0].name],
+                                value=None,
                             ),
                         ],
                         style={"width": "33%"},
@@ -93,11 +98,17 @@ if len(scalar_fields) > 0:
                         style={"width": "33%"},
                     ),
                 ],
-                style={"width": "80%", "margin-left": "auto", "margin-right": "auto"},
+                style={
+                    "display": "flex",
+                    "justifyContent": "space-between",
+                    "width": "80%",
+                    "margin": "auto",
+                },
             ),
+            html.Div(id="hover-data", style={"margin": "auto"}),
             html.Div(
                 [html.Div(id="table"), dcc.Graph(id="indicator-graphic")],
-                style={"width": "80%", "margin-left": "auto", "margin-right": "auto"},
+                style={"width": "80%", "margin": "auto"},
             ),
         ]
     )
@@ -124,19 +135,30 @@ if len(scalar_fields) > 0:
         ],
     )
     def update_graph(xParam, xType, valFromX, valToX, muniChoice, categoryChoice):
-        data = []
-        print(muniChoice, categoryChoice)
+
         cats = BBR._meta.get_field(categoryChoice).choices
         x = [c[1] for c in cats]
 
-        for m in muniChoice:
-            hs = House.objects.filter(municipality=municipalities.get(name=m))
+        data = [
+            {
+                "x": x,
+                "y": [
+                    get_sum(houses, categoryChoice, c[0]) / len(houses) * 100
+                    for c in cats
+                ],
+                "type": "bar",
+                "name": "Danmark",
+            }
+        ]
 
-            y = [get_sum(hs, categoryChoice, c[0]) / len(hs) * 100 for c in cats]
+        if muniChoice is not None:
+            for m in muniChoice:
+                hs = House.objects.filter(municipality=municipalities.get(name=m))
 
-            data.append({"x": x, "y": y, "type": "bar", "name": m})
+                y = [get_sum(hs, categoryChoice, c[0]) / len(hs) * 100 for c in cats]
 
-        print(data)
+                data.append({"x": x, "y": y, "type": "bar", "name": m})
+
         plot = {
             "data": data,
             "layout": go.Layout(
@@ -146,10 +168,20 @@ if len(scalar_fields) > 0:
                     "type": "linear" if xType == "Linear" else "log",
                     "gridcolor": "white",
                     "gridwidth": 2,
+                    "range": [0, 100],
                 },
                 hovermode="closest",
+                hoverData={},
                 paper_bgcolor="rgb(243, 243, 243)",
                 plot_bgcolor="rgb(243, 243, 243)",
             ),
         }
         return plot
+
+    @app.callback(
+        dash.dependencies.Output("hover-data", "children"),
+        [dash.dependencies.Input("indicator-graphic", "hoverData")],
+    )
+    def display_hover_data(hoverData):
+        print(hoverData)
+        return html.P("hej")
