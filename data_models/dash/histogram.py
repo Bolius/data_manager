@@ -1,7 +1,8 @@
+import json
+
 import dash
 import dash_core_components as dcc
 import dash_html_components as html
-import json
 import numpy as np
 from django_plotly_dash import DjangoDash
 from numpy import arange
