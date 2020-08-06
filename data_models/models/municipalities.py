@@ -56,9 +56,22 @@ class Municipality(models.Model):
             muni_averages.append(averages)
             res["categorical"][municipality.admin_code] = {}
             for cat_field in BBR.categorical_fields:
-                res["categorical"][municipality.admin_code][
-                    cat_field
-                ] = buldings_in_muni.values(cat_field).annotate(count=Count(cat_field))
+                choices = [
+                    field.choices
+                    for field in BBR._meta.fields
+                    if field.name == cat_field
+                ][0]
+                res["categorical"][municipality.admin_code][cat_field] = {}
+                for val, _name in choices:
+                    res["categorical"][municipality.admin_code][cat_field][val] = 0
+
+                counts = buldings_in_muni.values(cat_field).annotate(
+                    count=Count(cat_field)
+                )
+                for c in counts:
+                    res["categorical"][municipality.admin_code][cat_field][
+                        c[cat_field]
+                    ] += c["count"]
 
         res["muni_averages"] = pd.DataFrame(muni_averages)
         res["data"] = pd.DataFrame(res["data"])

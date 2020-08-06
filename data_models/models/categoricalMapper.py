@@ -125,16 +125,16 @@ BATHING_FACILITY = [
     ("D", "Hverken badeværelse eller adgang til badeværelse"),
 ]
 
-#
-#
-#
-#
-#
 
-RECIDENTIAL_TYPE_CHOICES = [
-    ("one_fam", "Enfamiliehuse"),
-    ("farm", "Stuehuse til landbrug"),
-    ("row", "Række/kæde-huse"),
+RECIDENTIAL_TYPE_CHOICES = [  # TODO add this
+    ("120", "Enfamiliehuse"),
+    ("110", "Stuehuse til landbrug"),
+    ("130", "Række/kæde-huse"),
+    (
+        "140",
+        "Etagebolig-bygning, flerfamilehus eller to- familiehus (vandret adskillelse mellem enhederne)",
+    ),
+    ("132", "Dobbelthus (to boliger med lodret adskillelse mellem enhederne)"),
     ("multi", "Dobbelt-/flerfamiliehuse"),
     ("story", "Etageboliger"),
     ("oth", "Anden, herunder kollegier"),
