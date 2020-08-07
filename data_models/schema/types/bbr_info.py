@@ -1,5 +1,6 @@
-from data_models.models import BBR
 from graphene_django.types import DjangoObjectType
+
+from data_models.models import BBR
 
 
 class BBRInfo(DjangoObjectType):

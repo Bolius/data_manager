@@ -1,7 +1,8 @@
 import graphene
 
-from .bbr_info import BBRInfo
 from data_models.models import House as HOUSE_DB
+
+from .bbr_info import BBRInfo
 
 
 class House(graphene.ObjectType):
