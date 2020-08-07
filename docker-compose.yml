@@ -3,9 +3,9 @@ version: "3.7"
 services:
   web:
     build:
-        context: .
-        args:
-            - arg_debug_mode=True
+      context: .
+      args:
+        - arg_debug_mode=True
     command: ./manage.py runserver web:80
     volumes:
       - .:/app
@@ -45,11 +45,11 @@ services:
       retries: 5
 
   selenium:
-      image: selenium/standalone-chrome
-      networks:
-          - webnet
-      ports:
-          - 4444
+    image: selenium/standalone-chrome
+    networks:
+      - webnet
+    ports:
+      - 4444
 
 volumes:
   postgis_orm:

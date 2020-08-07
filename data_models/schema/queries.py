@@ -9,11 +9,14 @@ class Query(graphene.ObjectType):
         House,
         addressInput=graphene.String(required=False),
         kvhxInput=graphene.String(required=False),
+        access_id=graphene.String(required=False),
     )
 
-    def resolve_house(self, info, addressInput=None, kvhxInput=None):
+    def resolve_house(self, info, addressInput=None, kvhxInput=None, access_id=None):
         if addressInput is not None:
             return House(addressInput=addressInput)
+        # elif access_id is not None:
+        #     return Houseadd_house(kvhxInput=access_id)
         elif kvhxInput is not None:
             return House(kvhxInput=kvhxInput)
         else:
