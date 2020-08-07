@@ -8,12 +8,8 @@ def address_to_kvhx(address):
     if response.status_code != 200:
         raise ValueError(f"Dawa gave error: {response.status_code} for {address=}")
     response = response.json()
-    if (nr_ans := len(response)) != 1:
-        raise ValueError(
-            f"Dawa gave empty list for {address=}"
-            if nr_ans == 0
-            else f"Dawa gave more than one address for {address=}"
-        )
+    if len(response) == 0:
+        raise ValueError(f"Dawa gave empty list for {address=}")
     return response[0]["kvhx"]
 
 

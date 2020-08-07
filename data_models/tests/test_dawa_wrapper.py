@@ -10,9 +10,6 @@ class DataHandlerTestCase(TestCase):
         actual_kvhx = address_to_kvhx(address)
         self.assertEqual(expected_kvhx, actual_kvhx)
 
-    def test_address_to_kvhx_unspeciffic_address(self):
-        unspecific_address = "glahns alle 41, 2000 Frederiksberg"
-        self.assertRaises(ValueError, lambda: address_to_kvhx(unspecific_address))
-
+    def test_address_to_kvhx_invalid_address(self):
         wrong_address = "glahns all 41, 2000 Frederiksberg"
         self.assertRaises(ValueError, lambda: address_to_kvhx(wrong_address))
