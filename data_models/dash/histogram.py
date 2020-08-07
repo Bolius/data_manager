@@ -14,8 +14,6 @@ from data_models.models import integer_fields as scalar_fields
 external_stylesheets = ["https://codepen.io/chriddyp/pen/bWLwgP.css"]
 app = DjangoDash("HistogramVis", external_stylesheets=external_stylesheets)
 build_years = arange(1800, 2020, 1)
-municipalities = Municipality.objects.all()
-houses = House.objects.all()
 
 
 styles = {
@@ -23,11 +21,13 @@ styles = {
         "border": "thin lightgrey solid",
         "overflowX": "scroll",
         "margin": "auto",
-        "width": "80%",
+        "width": "50%",
     }
 }
 
 if len(scalar_fields) > 0:
+    houses = House.objects.all()
+    municipalities = Municipality.objects.all()
     app.layout = html.Div(
         children=[
             html.Div(
@@ -124,16 +124,33 @@ if len(scalar_fields) > 0:
                 style={"width": "80%", "margin": "auto"},
             ),
             html.Div(
-                # id="hover-data",
                 [
-                    dcc.Markdown(
-                        """
-                    **Hold markøren over en søjle for at se information**
-                """,
-                        style={"width": "80%", "margin": "auto"},
+                    html.Div(
+                        [
+                            dcc.Markdown(
+                                """
+                        **Hold markøren over en søjle for at se information**
+                    """,
+                                style={"width": "80%", "margin": "auto"},
+                            ),
+                            html.Pre(id="hover-data"),
+                        ],
+                        style=styles["pre"],
                     ),
-                    html.Pre(id="hover-data", style=styles["pre"]),
-                ]
+                    html.Div(
+                        [
+                            dcc.Markdown(
+                                """
+                        **Klik på en søjle for at se information**
+                    """,
+                                style={"width": "80%", "margin": "auto"},
+                            ),
+                            html.Pre(id="click-data"),
+                        ],
+                        style=styles["pre"],
+                    ),
+                ],
+                style={"width": "80%", "display": "flex", "margin": "auto"},
             ),
         ]
     )
@@ -206,7 +223,7 @@ if len(scalar_fields) > 0:
         plot = {
             "data": data,
             "layout": go.Layout(
-                xaxis={"title": "Byer", "gridcolor": "white", "gridwidth": 2},
+                xaxis={"title": "Byer", "gridcolor": "white", "gridwidth": 3},
                 yaxis={
                     "title": "Procentdel",
                     "type": "linear" if xType == "Linear" else "log",
@@ -227,3 +244,10 @@ if len(scalar_fields) > 0:
     )
     def display_hover_data(hoverData):
         return json.dumps(hoverData, indent=2)
+
+    @app.callback(
+        dash.dependencies.Output("click-data", "children"),
+        [dash.dependencies.Input("indicator-graphic", "clickData")],
+    )
+    def display_click_data(clickData):
+        return json.dumps(clickData, indent=2)
