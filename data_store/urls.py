@@ -9,6 +9,7 @@ from data_models.dash.map import app as MapVis  # noqa
 from data_models.dash.scatter import app as ScatterVis  # noqa
 from data_models.views import (
     EntryPage,
+    HistogramView,
     MunicipalityMapView,
     TimeView,
     address_view,
@@ -28,4 +29,5 @@ urlpatterns = [
     path(r"address/", address_view, name="address"),
     path(r"address/<address>", address_view, name="addressInfo"),
     path("visualizer/municipalities", MunicipalityMapView, name="muni_map"),
+    path("visualizer/histogram", HistogramView, name="hist_visualiser"),
 ]
