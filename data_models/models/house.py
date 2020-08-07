@@ -4,7 +4,11 @@ from __future__ import unicode_literals
 from django.contrib.gis.db import models as geo_models
 from django.contrib.gis.geos import Point
 
-from data_models.api_wrappers import access_id_to_address, kvhx_to_address
+from data_models.api_wrappers import (
+    access_id_to_address,
+    address_to_kvhx,
+    kvhx_to_address,
+)
 
 from .bbr import BBR
 from .municipalities import Municipality
@@ -27,10 +31,11 @@ class House(geo_models.Model):  # TODO rename house address
         return f"Adgangsadresse: {self.access_id}"
 
     @staticmethod
-    def add_house(access_id=None, kvhx=None):
-        if (access_id, kvhx) == (None, None):
-            raise ValueError("Either access_id or kvhx must be specified")
-        if kvhx is not None:
+    def add_house(access_id=None, kvhx=None, address_text=None):
+        if (access_id, kvhx, address_text) == (None, None, None):
+            raise ValueError("Either access_id, address text or kvhx must be specified")
+        if kvhx is not None or address_text is not None:
+            kvhx = address_to_kvhx(address_text) if kvhx is None else kvhx
             houses = House.objects.filter(kvhx=kvhx)
             if len(houses) > 0:
                 return houses[0]
