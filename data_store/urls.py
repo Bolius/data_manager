@@ -5,7 +5,6 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.generic.base import RedirectView
 from graphene_django.views import GraphQLView
 
-from data_models.dash.histogram import app as HistogramVis  # noqa
 from data_models.dash.map import app as MapVis  # noqa
 from data_models.dash.scatter import app as ScatterVis  # noqa
 from data_models.views import (
