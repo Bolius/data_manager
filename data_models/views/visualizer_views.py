@@ -12,9 +12,9 @@ with open("/tmp/migrate_status", "w") as f:
 with open("/tmp/migrate_status", "r") as f:
     lines = " ".join(f.readlines())
 if "[ ]" not in lines:
+    from data_models.dash.histogram import app as HistogramVis  # noqa
     from data_models.dash.municipality_map import app as MuniVis  # noqa
     from data_models.dash.time import app as TimeVis  # noqa
-    from data_models.dash.histogram import app as HistogramVis  # noqa
 
 
 def scatter(request):
