@@ -16,6 +16,15 @@ class CityTest(TestCase):
         self.assertEqual(house.municipality.name, "Esbjerg")
         house.delete()
 
+    def test_add_house_by_address(self):
+        address = "Glahns Alle 41 4. th 2000 Frederiksberg"
+        self.assertEqual(House.objects.all().count(), 0)
+        house = House.add_house(address_text=address)
+        self.assertEqual(House.objects.all().count(), 1)
+        self.assertEqual(house.zip_code, 2000)
+        self.assertEqual(house.municipality.name, "Frederiksberg")
+        house.delete()
+
     def test_add_houses(self):
         nr_houses = 10
         self.assertEqual(House.objects.all().count(), 0)
