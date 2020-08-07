@@ -18,8 +18,8 @@ nav {
         align-self: center;
         @extend %rounded-rect;
         font-size: 20px;
-        padding: 7px;
-        color: white;
+        padding: 25px;
+        color: #6c7f80;
         display: inline-block;
 
         @include definitions.for-phone {
