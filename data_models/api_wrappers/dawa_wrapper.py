@@ -1,14 +1,27 @@
 import requests
 
 
+def address_to_kvhx(address):
+    response = requests.request(
+        "GET", "https://dawa.aws.dk/adresser", params={"q": address}
+    )
+    if response.status_code != 200:
+        raise ValueError(f"Dawa gave error: {response.status_code} for {address=}")
+    response = response.json()
+    if (nr_ans := len(response)) != 1:
+        raise ValueError(
+            f"Dawa gave empty list for {address=}"
+            if nr_ans == 0
+            else f"Dawa gave more than one address for {address=}"
+        )
+    return response[0]["kvhx"]
+
+
 def kvhx_to_address(kvhx, small_resp=False):
     response = requests.request(
         "GET",
         "https://dawa.aws.dk/adresser",
-        params={
-            "kvhx": "05610484_103_______",
-            "struktur": "mini" if small_resp else "nestet",
-        },
+        params={"kvhx": kvhx, "struktur": "mini" if small_resp else "nestet"},
     )
     if response.status_code != 200:
         raise ValueError(f"KVHX ({kvhx}) not found")
