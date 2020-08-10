@@ -260,10 +260,7 @@ description = "Extensions for Django"
 name = "django-extensions"
 optional = false
 python-versions = ">=3.5"
-version = "3.0.3"
-
-[package.dependencies]
-six = ">=1.2"
+version = "3.0.4"
 
 [[package]]
 category = "main"
@@ -899,7 +896,7 @@ version = "5.2.0"
 brotli = ["brotli"]
 
 [metadata]
-content-hash = "fd392d9f73669da81ec2fd33552828a83f2551ae7e98a09fd505915c21c0c9b6"
+content-hash = "7d95bc65f465a62ca8114be43acb4276b9c65f3b1ffb135659145068f9f1a35e"
 python-versions = "^3.8"
 
 [metadata.files]
@@ -1055,8 +1052,8 @@ django-cors-headers = [
     {file = "django_cors_headers-3.4.0-py3-none-any.whl", hash = "sha256:5240062ef0b16668ce8a5f43324c388d65f5439e1a30e22c38684d5ddaff0d15"},
 ]
 django-extensions = [
-    {file = "django-extensions-3.0.3.tar.gz", hash = "sha256:6230898b1e1d5deb3ddab8335b2d270edb7afa4ef916a95e479a19fdfb0464cb"},
-    {file = "django_extensions-3.0.3-py2.py3-none-any.whl", hash = "sha256:d5fcf8f3bab019487e07473c24453bccd5acfb4440f3ef36788294c307b09d4c"},
+    {file = "django-extensions-3.0.4.tar.gz", hash = "sha256:d1e94df479daf681c33f2f5647403ee904e9268b00b5506705f4c1ee0067ed1b"},
+    {file = "django_extensions-3.0.4-py2.py3-none-any.whl", hash = "sha256:237e8262ce2a4ec8acd2ee6cbc822095e26e78f72ceb77d4d0a0918860f84fbb"},
 ]
 django-plotly-dash = [
     {file = "django-plotly-dash-1.4.2.tar.gz", hash = "sha256:77115a6840e1a28d462ef17f59cdb47946786dbe0e95d8fdd904dd6046b2aed9"},
