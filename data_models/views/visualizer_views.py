@@ -1,9 +1,6 @@
-from django.conf import settings
 from django.core.management import call_command
 from django.shortcuts import render
-from graphene import Schema
 
-from data_models.schema import Query
 from data_models.models import House
 
 """ A dirty hack around plotly loading apps before migrations are applied """

@@ -3,8 +3,8 @@ from .visualizer_views import (
     HistogramView,
     MunicipalityMapView,
     TimeView,
-    address_view,
     address_enter,
+    address_view,
     map,
     scatter,
 )
