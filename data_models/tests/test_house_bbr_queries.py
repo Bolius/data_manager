@@ -30,6 +30,7 @@ class HouseBBRQuriesTest(GraphQLTestCase):
             }
         }"""
         )
+        print(response.json())
         bbr = response.json()["data"]["house"]["bbrInfo"]
         self.assertResponseNoErrors(response)
         self.assertEqual(bbr["buildingArea"], 131)
