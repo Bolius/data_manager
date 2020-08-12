@@ -110,7 +110,11 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
-DATABASES = {"default": dj_database_url.parse(os.environ["DATABASE_URL"])}
+DATABASES = {
+    "default": dj_database_url.parse(
+        f"postgis://postgres:{os.environ['POSTGRES_PASSWORD']}@database:5432/data_manager"
+    )
+}
 
 LANGUAGE_CODE = "da-dk"
 TIME_ZONE = "Europe/Copenhagen"

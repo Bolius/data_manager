@@ -23,8 +23,7 @@ services:
       - MANAGERS=$MANAGERS
       - EMAIL_URL=$EMAIL_URL
       - SENTRY_DSN=$SENTRY_DSN
-      - KORTFORSYNINGEN=$KORTFORSYNINGEN
-      - DATABASE_URL=$DATABASE_URL
+      - POSTGRES_PASSWORD=$POSTGRES_PASSWORD
 
   database:
     image: postgis/postgis:12-master
@@ -33,9 +32,8 @@ services:
     volumes:
       - postgis_orm:/var/lib/postgresql/data/
     environment:
-      - POSTGRES_USER=$POSTGRES_USER
       - POSTGRES_PASSWORD=$POSTGRES_PASSWORD
-      - POSTGRES_DB=$POSTGRES_DB
+      - POSTGRES_DB=data_manager
     ports:
       - "${DB_PORT}:${DB_PORT}"
     healthcheck:
