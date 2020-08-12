@@ -21,16 +21,16 @@ class HouseBBRQuriesTest(GraphQLTestCase):
         self.assertEqual(bbr["buildingArea"], 173)
 
     def test_kvhx_input(self):
-        return None
         response = self.query(
             """{
             house(kvhxInput: "06157266__10_______"){
                 bbrInfo{
-                    buldingArea
+                    buildingArea
                 }
             }
         }"""
         )
+        print(response.json())
         bbr = response.json()["data"]["house"]["bbrInfo"]
         self.assertResponseNoErrors(response)
-        self.assertEqual(bbr["buldingArea"], 131)
+        self.assertEqual(bbr["buildingArea"], 131)
