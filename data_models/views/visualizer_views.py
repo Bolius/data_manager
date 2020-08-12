@@ -100,6 +100,5 @@ def address_view(request, address_id=None):
         # # except:
         # #     # TODO: show error message
         # #     return render(request, "data_models/adressView.html", {})
-    print("YOOYOYOYOY")
     house = House.add_house(access_id=address_id)
     return render(request, "data_models/adressInfo.html", {"house": house})
