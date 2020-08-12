@@ -1,5 +1,5 @@
 name: Runs deployment steps and analyses code
-'on':
+"on":
   push:
     branches:
       - master
@@ -13,8 +13,8 @@ jobs:
       - name: Push to GitHub Packages
         uses: docker/build-push-action@v1
         with:
-          username: '${{ secrets.docker_user }}'
-          password: '${{ secrets.docker_token }}'
+          username: "${{ secrets.docker_user }}"
+          password: "${{ secrets.docker_token }}"
           repository: rotendahl/bolius
           tag_with_sha: true
           tag_with_ref: true
@@ -35,5 +35,5 @@ jobs:
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v1.0.12
         with:
-          token: '${{ secrets.code_cov_token }}'
+          token: "${{ secrets.code_cov_token }}"
           file: ./coverage.xml
