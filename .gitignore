@@ -7,3 +7,8 @@ ai_models
 staticfiles
 db.sqlite3
 .coverage
+
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml
