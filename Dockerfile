@@ -3,7 +3,7 @@ FROM python:3.8
 WORKDIR /app
 
 RUN apt-get update && \
-apt-get install -y apt-utils binutils libproj-dev gdal-bin graphviz
+    apt-get install -y apt-utils binutils libproj-dev gdal-bin graphviz
 
 RUN wget -O \
         /tmp/sass.tar.gz  \
@@ -29,9 +29,6 @@ ENV DEBUG=$arg_debug_mode
 COPY entrypoint.sh app/entrypoint.sh
 ENTRYPOINT ["/app/entrypoint.sh"]
 
-# Force stdin, stdout and stderr to be totally unbuffered.
-ENV PYTHONDONTWRITEBYTECODE 1
-ENV PYTHONUNBUFFERED 1
 
 COPY . /app
 

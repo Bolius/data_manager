@@ -36,12 +36,13 @@ categorical_fields = [  # TODO remove this
     "heat_supply",
     "water_supply",
     "wall_material",
-    "energy_supply",
+    "energy_type",
     "roofing_material",
     "property_type",
     "kitchen_facility",
     "toilet_facility",
     "bathing_facility",
+    "residential_type",
 ]
 
 
