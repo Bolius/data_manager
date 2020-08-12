@@ -1,4 +1,5 @@
 import graphene
+
 from data_models.tests.factories import add_houses
 
 

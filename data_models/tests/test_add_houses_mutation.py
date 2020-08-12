@@ -1,7 +1,7 @@
 from graphene_django.utils.testing import GraphQLTestCase
 
-from data_models.schema import schema
 from data_models.models import House
+from data_models.schema import schema
 
 
 class AddHouseMutationTest(GraphQLTestCase):
