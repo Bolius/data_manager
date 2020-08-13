@@ -6,6 +6,8 @@ from django_plotly_dash import DjangoDash
 from data_models.models import BBR
 
 data = BBR.get_time_data()
+
+
 rolling_data = BBR.get_rolling_avgs()
 
 
@@ -29,6 +31,7 @@ def categorical_to_traces(categorical, time_range, field):
 
 
 def get_accumulated_figure():
+    data = BBR.get_time_data()
     fig = {
         "data": [
             {
@@ -55,7 +58,7 @@ def get_accumulated_figure():
     fig["data"].extend(
         categorical_to_traces(
             BBR.accumulated_sum_for_catatgorical(
-                "kitchen_facility", data["time_range"][0], data["time_range"][-1]
+                "kitchen_facility", data["time_range"][0], data["time_range"][-1],
             ),
             data["time_range"],
             "kitchen_facility",
@@ -64,16 +67,16 @@ def get_accumulated_figure():
     fig["data"].extend(
         categorical_to_traces(
             BBR.accumulated_sum_for_catatgorical(
-                "heat_install", data["time_range"][0], data["time_range"][-1]
+                "heat_install", data["time_range"][0], data["time_range"][-1],
             ),
             data["time_range"],
-            "heat_install",
+            "heat_install",  # TODO is this right?
         )
     )
     fig["data"].extend(
         categorical_to_traces(
             BBR.accumulated_sum_for_catatgorical(
-                "roofing_material", data["time_range"][0], data["time_range"][-1]
+                "roofing_material", data["time_range"][0], data["time_range"][-1],
             ),
             data["time_range"],
             "roofing_material",
@@ -82,7 +85,7 @@ def get_accumulated_figure():
     fig["data"].extend(
         categorical_to_traces(
             BBR.accumulated_sum_for_catatgorical(
-                "property_type", data["time_range"][0], data["time_range"][-1]
+                "property_type", data["time_range"][0], data["time_range"][-1],
             ),
             data["time_range"],
             "property_type",
@@ -174,6 +177,7 @@ app.layout = html.Div(
             labelStyle={"display": "block"},
             style={"textAlign": "center"},
         ),
+        dcc.Interval(id="interval-component", interval=5 * 1000, n_intervals=0),
     ],
 )
 
@@ -181,3 +185,12 @@ app.layout = html.Div(
 @app.callback(Output("time-graph", "figure"), [Input("cum-or-avg", "value")])
 def update_graph(graph_type):
     return get_rolling_figure() if graph_type == "avg" else get_accumulated_figure()
+
+
+@app.callback(
+    Output("live-update-text", "children"), [Input("interval-component", "n_intervals")]
+)
+def update_metrics(n):
+    print("\n\nUPDATAD DATA \n")
+    data = BBR.get_time_data()
+    return data
