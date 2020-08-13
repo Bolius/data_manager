@@ -32,7 +32,22 @@
       "memoryReservation": 5,
       "essential": true,
       "portMappings": [{ "hostPort": 5432, "containerPort": 5432 }],
-      "environment": [{ "name": "POSTGRES_DB", "value": "data_manager" }]
+      "environment": [{ "name": "POSTGRES_DB", "value": "data_manager" }],
+      "mountPoints": [
+        {
+          "sourceVolume": "postgres_volume",
+          "containerPath": "/var/lib/postgresql/data/"
+        }
+      ]
+    }
+  ],
+  "volumes": [
+    {
+      "name": "postgres_volume",
+      "dockerVolumeConfiguration": {
+        "scope": "shared",
+        "autoprovision": true
+      }
     }
   ]
 }
