@@ -4,7 +4,9 @@ import time
 import dj_database_url
 import psycopg2
 
-credentials = dj_database_url.parse(os.environ["DATABASE_URL"])
+credentials = dj_database_url.parse(
+    f"postgis://postgres:{os.environ['POSTGRES_PASSWORD']}@database:5432/data_manager"
+)
 is_connected = False
 
 for i in range(10):

@@ -36,12 +36,13 @@ categorical_fields = [  # TODO remove this
     "heat_supply",
     "water_supply",
     "wall_material",
-    "energy_supply",
+    "energy_type",
     "roofing_material",
     "property_type",
     "kitchen_facility",
     "toilet_facility",
     "bathing_facility",
+    "residential_type",
 ]
 
 
@@ -106,13 +107,12 @@ class BBR(models.Model):  # TODO Rename to bulding / house
         "Primær varmeinstallation",
         max_length=2,
         choices=HEAT_INSTALL_CHOICES,
-        null=True,
+        default="0",
     )
     heat_type = models.CharField(
         "Primært Opvarmningsmiddel",
         max_length=2,
         choices=HEAT_TYPE_CHOICES,
-        null=True,
         default="0",
     )
 
@@ -120,36 +120,36 @@ class BBR(models.Model):  # TODO Rename to bulding / house
         "Supplerende Varmekilde",
         max_length=2,
         choices=HEAT_SUPPLY_INSTALL_CHOICES,
-        null=True,
+        default="0",
     )
     water_supply = models.CharField(
-        "Vandforsyning", max_length=2, choices=WATER_SUPPLY_CHOICES, null=True,
+        "Vandforsyning", max_length=2, choices=WATER_SUPPLY_CHOICES, default="0",
     )
     wall_material = models.CharField(
-        "Ydervægs Materiale", max_length=2, choices=WALL_MATERIAL_CHOICES, null=True,
+        "Ydervægs Materiale", max_length=2, choices=WALL_MATERIAL_CHOICES, default="0",
     )
 
     roofing_material = models.CharField(
         "Tagdækningsmateriale",
         max_length=2,
         choices=ROOFING_MATERIAL_CHOICES,
-        null=True,
+        default="0",
     )
 
     property_type = models.CharField(
-        "Boligtype", max_length=2, choices=PROPERTY_TYPE_CHOICES, null=True,
+        "Boligtype", max_length=2, choices=PROPERTY_TYPE_CHOICES, default="0",
     )
 
     kitchen_facility = models.CharField(
-        "køkkenforhold", max_length=2, choices=KITCHEN_FACILITY, null=True,
+        "køkkenforhold", max_length=2, choices=KITCHEN_FACILITY, default="0"
     )
 
     toilet_facility = models.CharField(
-        "Toiletforhold", max_length=2, choices=TOILET_FACILITY, null=True,
+        "Toiletforhold", max_length=2, choices=TOILET_FACILITY, default="0"
     )
 
     bathing_facility = models.CharField(
-        "badeforhold", max_length=2, choices=BATHING_FACILITY, null=True
+        "badeforhold", max_length=2, choices=BATHING_FACILITY, default="0"
     )
 
     def __str__(self):
@@ -197,7 +197,6 @@ class BBR(models.Model):  # TODO Rename to bulding / house
         building.commercial_area = data["ENH_ERHV_ARL"]
 
         building.energy_type = "0" if (val := data["ENERGI_KODE"]) is None else val
-        building.residential_type = data["ENH_ANVEND_KODE"]
         building.heat_install = data["bygning"]["VARMEINSTAL_KODE"]
         building.heat_type = (
             "0" if (val := data["bygning"]["OPVARMNING_KODE"]) is None else val
@@ -207,9 +206,17 @@ class BBR(models.Model):  # TODO Rename to bulding / house
         building.wall_material = data["bygning"]["YDERVAEG_KODE"]
         building.roofing_material = data["bygning"]["TAG_KODE"]
         building.property_type = data["BOLIGTYPE_KODE"]
-        building.kitchen_facility = data["KOEKKEN_KODE"]
-        building.toilet_facility = data["TOILET_KODE"]
-        building.bathing_facility = data["BAD_KODE"]
+        building.kitchen_facility = (
+            "0" if (val := data["KOEKKEN_KODE"]) is None else val
+        )
+        building.toilet_facility = "0" if (val := data["TOILET_KODE"]) is None else val
+        building.bathing_facility = "0" if (val := data["BAD_KODE"]) is None else val
+        # TODO should we change this?
+        resiType = data["ENH_ANVEND_KODE"]
+        if resiType in [nr for nr, _type in RECIDENTIAL_TYPE_CHOICES]:
+            building.residential_type = data["ENH_ANVEND_KODE"]
+        else:
+            building.residential_type = "oth"
         building.save()
 
     @staticmethod

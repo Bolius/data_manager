@@ -26,12 +26,13 @@
 />
 <link rel="stylesheet" href="{% static 'address_app.css' %}" />
 <script>
+  const url_parts = window.location.href.split("/");
 
   dawaAutocomplete.dawaAutocomplete(
     document.getElementById("autocomplete-input"),
     {
       select: function(selected) {
-        location.href = '/address/' + selected.tekst
+        window.location.href = window.location.href  + selected["data"]["id"]
       }
     }
   );

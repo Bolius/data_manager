@@ -3,9 +3,9 @@ version: "3.7"
 services:
   web:
     build:
-        context: .
-        args:
-            - arg_debug_mode=True
+      context: .
+      args:
+        - arg_debug_mode=True
     command: ./manage.py runserver web:80
     volumes:
       - .:/app
@@ -23,9 +23,7 @@ services:
       - MANAGERS=$MANAGERS
       - EMAIL_URL=$EMAIL_URL
       - SENTRY_DSN=$SENTRY_DSN
-      - KORTFORSYNINGEN=$KORTFORSYNINGEN
-      - DATABASE_URL=$DATABASE_URL
-
+      - POSTGRES_PASSWORD=$POSTGRES_PASSWORD
   database:
     image: postgis/postgis:12-master
     networks:
@@ -33,9 +31,8 @@ services:
     volumes:
       - postgis_orm:/var/lib/postgresql/data/
     environment:
-      - POSTGRES_USER=$POSTGRES_USER
       - POSTGRES_PASSWORD=$POSTGRES_PASSWORD
-      - POSTGRES_DB=$POSTGRES_DB
+      - POSTGRES_DB=data_manager
     ports:
       - "${DB_PORT}:${DB_PORT}"
     healthcheck:
@@ -45,11 +42,11 @@ services:
       retries: 5
 
   selenium:
-      image: selenium/standalone-chrome
-      networks:
-          - webnet
-      ports:
-          - 4444
+    image: selenium/standalone-chrome
+    networks:
+      - webnet
+    ports:
+      - 4444
 
 volumes:
   postgis_orm:

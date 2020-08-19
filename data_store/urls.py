@@ -9,6 +9,7 @@ from data_models.dash.map import app as MapVis  # noqa
 from data_models.dash.scatter import app as ScatterVis  # noqa
 from data_models.views import (
     EntryPage,
+    HistogramView,
     MunicipalityMapView,
     TimeView,
     address_view,
@@ -22,10 +23,11 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("", EntryPage, name="entry_page"),
     path("scatter", scatter, name="scatter"),
-    path("visualizer/map", map, name="map_visualiser"),
-    path("visualizer/time", TimeView, name="time_visualiser"),
     path("graphql/", csrf_exempt(GraphQLView.as_view(graphiql=False))),
     path(r"address/", address_view, name="address"),
-    path(r"address/<address>", address_view, name="addressInfo"),
+    path(r"address/<address_id>", address_view, name="addressInfo"),
+    path("visualizer/map", map, name="map_visualiser"),
+    path("visualizer/time", TimeView, name="time_visualiser"),
     path("visualizer/municipalities", MunicipalityMapView, name="muni_map"),
+    path("visualizer/histogram", HistogramView, name="hist_visualiser"),
 ]

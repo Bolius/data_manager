@@ -1,5 +1,6 @@
 from __future__ import unicode_literals
 
+# from sentry_sdk import capture_exception, capture_message
 import geojson
 import pandas as pd
 from django.contrib.gis.db import models
@@ -69,10 +70,16 @@ class Municipality(models.Model):
                     count=Count(cat_field)
                 )
                 for c in counts:
-                    res["categorical"][municipality.admin_code][cat_field][
-                        c[cat_field]
-                    ] += c["count"]
-
+                    try:
+                        res["categorical"][municipality.admin_code][cat_field][
+                            c[cat_field]
+                        ] += c["count"]
+                    except KeyError as e:
+                        # TODO setup sentry                        capture_exception(e)
+                        #                        capture_message(f"Key error For field {cat_field}")
+                        print(e)
+                        print(f"Key error For field {cat_field}")
+                        continue
         res["muni_averages"] = pd.DataFrame(muni_averages)
         res["data"] = pd.DataFrame(res["data"])
         res["data"].index = res["data"]["admin_code"]
