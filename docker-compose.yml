@@ -24,7 +24,6 @@ services:
       - EMAIL_URL=$EMAIL_URL
       - SENTRY_DSN=$SENTRY_DSN
       - POSTGRES_PASSWORD=$POSTGRES_PASSWORD
-
   database:
     image: postgis/postgis:12-master
     networks:
