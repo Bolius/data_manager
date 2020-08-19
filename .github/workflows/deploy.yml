@@ -19,7 +19,7 @@ jobs:
           tag_with_sha: true
           tag_with_ref: true
   coverage:
-    name: Build and Push Docker image to GitHub Packages
+    name: Upload coverage
     runs-on: ubuntu-latest
     steps:
       - name: Check out the repo
