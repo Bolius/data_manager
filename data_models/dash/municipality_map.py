@@ -8,8 +8,6 @@ from data_models.models import BBR, Municipality
 
 app = DjangoDash("municipality_map")
 
-muni_stats = Municipality.get_stats()
-
 
 app.layout = html.Div(
     children=[
@@ -77,6 +75,7 @@ app.layout = html.Div(
     Output("color-map", "figure"), [Input("map-dropdown", "value")],
 )
 def update_output(value):
+    muni_stats = Municipality.get_stats()
     fig = go.Figure(
         go.Choroplethmapbox(
             geojson=muni_stats["geo_data"],
@@ -108,6 +107,7 @@ def update_output(value):
     [Input("color-map", "clickData"), Input("bar-dropdown", "value")],
 )
 def update_bar(municipality, cat_field):
+    muni_stats = Municipality.get_stats()
     if municipality is None:
         fig = go.Figure()
         fig.update_layout(

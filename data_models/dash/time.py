@@ -5,11 +5,6 @@ from django_plotly_dash import DjangoDash
 
 from data_models.models import BBR
 
-data = BBR.get_time_data()
-
-
-rolling_data = BBR.get_rolling_avgs()
-
 
 def categorical_to_traces(categorical, time_range, field):
     traces = []
@@ -95,6 +90,7 @@ def get_accumulated_figure():
 
 
 def get_rolling_figure():
+    rolling_data = BBR.get_rolling_avgs()
     return {
         "data": [
             {
@@ -185,12 +181,3 @@ app.layout = html.Div(
 @app.callback(Output("time-graph", "figure"), [Input("cum-or-avg", "value")])
 def update_graph(graph_type):
     return get_rolling_figure() if graph_type == "avg" else get_accumulated_figure()
-
-
-@app.callback(
-    Output("live-update-text", "children"), [Input("interval-component", "n_intervals")]
-)
-def update_metrics(n):
-    print("\n\nUPDATAD DATA \n")
-    data = BBR.get_time_data()
-    return data

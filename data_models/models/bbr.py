@@ -197,11 +197,17 @@ class BBR(models.Model):  # TODO Rename to bulding / house
         building.commercial_area = data["ENH_ERHV_ARL"]
 
         building.energy_type = "0" if (val := data["ENERGI_KODE"]) is None else val
-        building.heat_install = data["bygning"]["VARMEINSTAL_KODE"]
+        building.heat_install = (
+            "0" if (val := data["bygning"]["VARMEINSTAL_KODE"]) is None else val
+        )
         building.heat_type = (
             "0" if (val := data["bygning"]["OPVARMNING_KODE"]) is None else val
         )
         building.heat_supply = "0" if (val := data["VARME_SUPPL_KODE"]) is None else val
+
+        building.water_supply = data["bygning"]["BYG_VANDFORSY_KODE"]
+        if building.water_supply not in [nr for nr, _type in WATER_SUPPLY_CHOICES]:
+            building.water_supply = "0"
         building.water_supply = data["bygning"]["BYG_VANDFORSY_KODE"]
         building.wall_material = data["bygning"]["YDERVAEG_KODE"]
         building.roofing_material = data["bygning"]["TAG_KODE"]
