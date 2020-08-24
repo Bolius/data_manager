@@ -1,15 +1,16 @@
-import urllib
+# import urllib
 
-import dash
-import dash_core_components as dcc
-import dash_html_components as html
-import pandas as pd
+# import dash
+# import dash_core_components as dcc
+# import dash_html_components as html
+# import pandas as pd
 from django_plotly_dash import DjangoDash
 from numpy import arange
-from plotly import graph_objs as go
 
-from data_models.models import BBR
-from data_models.models import integer_fields as scalar_fields
+# from plotly import graph_objs as go
+
+# from data_models.models import BBR
+# from data_models.models import integer_fields as scalar_fields
 
 external_stylesheets = ["https://codepen.io/chriddyp/pen/bWLwgP.css"]
 app = DjangoDash("ScatterVis", external_stylesheets=external_stylesheets)

@@ -1,18 +1,19 @@
-import dash
-import dash_core_components as dcc
-import dash_html_components as html
+# import dash
+# import dash_core_components as dcc
+# import dash_html_components as html
 from django_plotly_dash import DjangoDash
-from numpy import arange, array
-from plotly import graph_objs as go
 
-from data_models.models import BBR, House, categorical_fields
-from data_models.models import integer_fields as scalar_fields
+# from numpy import arange, array
+# from plotly import graph_objs as go
+
+# from data_models.models import BBR, House, categorical_fields
+# from data_models.models import integer_fields as scalar_fields
 
 mapbox_access_token = "pk.eyJ1IjoibWJwaGFtIiwiYSI6ImNqdDVqdGhwbjA2bjIzeW45dDR0MHl6bHAifQ.uxGVk7wDQmmOiwGS15ebjQ"
 app = DjangoDash("MapVis")
-houses = House.objects.all()
-bbr = BBR.objects.all()
-build_years = arange(1800, 2020, 1)
+# houses = House.objects.all()
+# bbr = BBR.objects.all()
+# build_years = arange(1800, 2020, 1)
 
 # if len(scalar_fields) > 0:
 #     app.layout = html.Div(
