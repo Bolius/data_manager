@@ -151,8 +151,8 @@ def get_rolling_figure():
     }
 
 
-app = DjangoDash("TimeVisualiser")
-app.layout = html.Div(
+TIME_GRAPH = DjangoDash("TimeVisualiser")
+TIME_GRAPH.layout = html.Div(
     children=[
         html.H1(children="Se udviklingen af data over tid"),
         html.Div(
@@ -178,6 +178,6 @@ app.layout = html.Div(
 )
 
 
-@app.callback(Output("time-graph", "figure"), [Input("cum-or-avg", "value")])
+@TIME_GRAPH.callback(Output("time-graph", "figure"), [Input("cum-or-avg", "value")])
 def update_graph(graph_type):
     return get_rolling_figure() if graph_type == "avg" else get_accumulated_figure()

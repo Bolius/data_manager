@@ -6,10 +6,10 @@ from plotly import graph_objects as go
 
 from data_models.models import BBR, Municipality
 
-app = DjangoDash("municipality_map")
+MUNICIPALITY_GRAPH = DjangoDash("municipality_map")
 
 
-app.layout = html.Div(
+MUNICIPALITY_GRAPH.layout = html.Div(
     children=[
         html.Div(
             [
@@ -71,7 +71,7 @@ app.layout = html.Div(
 )
 
 
-@app.callback(
+@MUNICIPALITY_GRAPH.callback(
     Output("color-map", "figure"), [Input("map-dropdown", "value")],
 )
 def update_output(value):
@@ -102,7 +102,7 @@ def update_output(value):
     return fig
 
 
-@app.callback(
+@MUNICIPALITY_GRAPH.callback(
     Output("bar-chart", "figure"),
     [Input("color-map", "clickData"), Input("bar-dropdown", "value")],
 )

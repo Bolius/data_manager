@@ -28,8 +28,7 @@
         {
           "name": "MANAGERS",
           "value": "[('Benjamin Rotendahl', 'Benjamin@Rotendahl.dk')]"
-        },
-        { "name": "ALLOWED_HOSTS", "value": "[\"*\"]" }
+        }
       ]
     },
     {

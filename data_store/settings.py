@@ -37,7 +37,7 @@ EMAIL_PORT = email["EMAIL_PORT"]
 EMAIL_USE_SSL = email["EMAIL_USE_SSL"]
 DEFAULT_FROM_EMAIL = SERVER_EMAIL
 
-ALLOWED_HOSTS = eval(os.environ["ALLOWED_HOSTS"])
+ALLOWED_HOSTS = ["*"]
 
 if "http://" in os.environ["SENTRY_DSN"]:  # Check if url
     RAVEN_CONFIG = {
