@@ -32,7 +32,7 @@ ENTRYPOINT ["/app/entrypoint.sh"]
 
 COPY . /app
 
-HEALTHCHECK CMD curl --fail http://localhost:8000/ || exit 1
+HEALTHCHECK CMD curl --fail http://0.0.0.0:8000/ || exit 1
 CMD ["gunicorn", "data_store.wsgi:application", \
      "--bind", "0.0.0.0:8000", \
      "--workers" , "4",  \
