@@ -13,7 +13,7 @@ from numpy import arange
 # from data_models.models import integer_fields as scalar_fields
 
 external_stylesheets = ["https://codepen.io/chriddyp/pen/bWLwgP.css"]
-app = DjangoDash("ScatterVis", external_stylesheets=external_stylesheets)
+SCATTER_GRAPH = DjangoDash("ScatterVis", external_stylesheets=external_stylesheets)
 build_years = arange(1800, 2020, 1)
 #
 # if len(scalar_fields) > 0:

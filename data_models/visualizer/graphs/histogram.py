@@ -12,7 +12,7 @@ from data_models.models import BBR, House, Municipality, categorical_fields
 from data_models.models import integer_fields as scalar_fields
 
 external_stylesheets = ["https://codepen.io/chriddyp/pen/bWLwgP.css"]
-app = DjangoDash("HistogramVis", external_stylesheets=external_stylesheets)
+HISTOGRAM_GRAPH = DjangoDash("HistogramVis", external_stylesheets=external_stylesheets)
 build_years = arange(1800, 2020, 1)
 
 
@@ -26,7 +26,7 @@ styles = {
 }
 
 municipalities = Municipality.objects.all()
-app.layout = html.Div(
+HISTOGRAM_GRAPH.layout = html.Div(
     children=[
         html.Div(
             [
@@ -176,7 +176,7 @@ def get_hover_data(categories, house_filtered=None):
     return np.append(hover1, hover2, axis=1)
 
 
-@app.callback(
+@HISTOGRAM_GRAPH.callback(
     dash.dependencies.Output("indicator-graphic", "figure"),
     [
         dash.dependencies.Input("xaxis", "value"),
@@ -238,7 +238,7 @@ def update_graph(xParam, xType, valFromX, valToX, muniChoice, categoryChoice):
     return plot
 
 
-@app.callback(
+@HISTOGRAM_GRAPH.callback(
     dash.dependencies.Output("hover-data", "children"),
     [dash.dependencies.Input("indicator-graphic", "hoverData")],
 )
@@ -246,7 +246,7 @@ def display_hover_data(hoverData):
     return json.dumps(hoverData, indent=2)
 
 
-@app.callback(
+@HISTOGRAM_GRAPH.callback(
     dash.dependencies.Output("click-data", "children"),
     [dash.dependencies.Input("indicator-graphic", "clickData")],
 )

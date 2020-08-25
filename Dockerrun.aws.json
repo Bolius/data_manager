@@ -8,6 +8,12 @@
       "memoryReservation": 5,
       "links": ["database"],
       "portMappings": [{ "hostPort": 80, "containerPort": 80 }],
+      "mountPoints": [
+        {
+          "sourceVolume": "scratch_storage",
+          "containerPath": "/tmp"
+        }
+      ],
       "dependsOn": [
         {
           "containerName": "database",
@@ -22,8 +28,7 @@
         {
           "name": "MANAGERS",
           "value": "[('Benjamin Rotendahl', 'Benjamin@Rotendahl.dk')]"
-        },
-        { "name": "ALLOWED_HOSTS", "value": "[\"*\"]" }
+        }
       ]
     },
     {
@@ -45,6 +50,10 @@
     {
       "name": "postgres_efs_volume",
       "host": { "sourcePath": "/efs" }
+    },
+    {
+      "name": "scratch_storage",
+      "host": { "sourcePath": "/tmp" }
     }
   ]
 }

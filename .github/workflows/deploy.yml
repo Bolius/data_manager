@@ -10,7 +10,7 @@ jobs:
     steps:
       - name: Check out the repo
         uses: actions/checkout@v2
-      - name: Push to GitHub Packages
+      - name: Push visualizer to Dockerhub
         uses: docker/build-push-action@v1
         with:
           username: "${{ secrets.docker_user }}"
@@ -18,8 +18,19 @@ jobs:
           repository: rotendahl/bolius
           tag_with_sha: true
           tag_with_ref: true
+
+      - name: Push client to docker hub
+        uses: docker/build-push-action@v1
+        with:
+          dockerfile: nginx/Dockerfile
+          path: nginx
+          username: "${{ secrets.docker_user }}"
+          password: "${{ secrets.docker_token }}"
+          repository: rotendahl/visualizer_nginx
+          tag_with_sha: true
+          tag_with_ref: true
   coverage:
-    name: Build and Push Docker image to GitHub Packages
+    name: Upload coverage
     runs-on: ubuntu-latest
     steps:
       - name: Check out the repo

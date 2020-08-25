@@ -6,12 +6,10 @@ from plotly import graph_objects as go
 
 from data_models.models import BBR, Municipality
 
-app = DjangoDash("municipality_map")
-
-muni_stats = Municipality.get_stats()
+MUNICIPALITY_GRAPH = DjangoDash("municipality_map")
 
 
-app.layout = html.Div(
+MUNICIPALITY_GRAPH.layout = html.Div(
     children=[
         html.Div(
             [
@@ -73,10 +71,11 @@ app.layout = html.Div(
 )
 
 
-@app.callback(
+@MUNICIPALITY_GRAPH.callback(
     Output("color-map", "figure"), [Input("map-dropdown", "value")],
 )
 def update_output(value):
+    muni_stats = Municipality.get_stats()
     fig = go.Figure(
         go.Choroplethmapbox(
             geojson=muni_stats["geo_data"],
@@ -103,11 +102,12 @@ def update_output(value):
     return fig
 
 
-@app.callback(
+@MUNICIPALITY_GRAPH.callback(
     Output("bar-chart", "figure"),
     [Input("color-map", "clickData"), Input("bar-dropdown", "value")],
 )
 def update_bar(municipality, cat_field):
+    muni_stats = Municipality.get_stats()
     if municipality is None:
         fig = go.Figure()
         fig.update_layout(

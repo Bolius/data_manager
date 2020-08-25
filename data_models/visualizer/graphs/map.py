@@ -10,7 +10,7 @@ from django_plotly_dash import DjangoDash
 # from data_models.models import integer_fields as scalar_fields
 
 mapbox_access_token = "pk.eyJ1IjoibWJwaGFtIiwiYSI6ImNqdDVqdGhwbjA2bjIzeW45dDR0MHl6bHAifQ.uxGVk7wDQmmOiwGS15ebjQ"
-app = DjangoDash("MapVis")
+MAP_GRAPH = DjangoDash("MapVis")
 # houses = House.objects.all()
 # bbr = BBR.objects.all()
 # build_years = arange(1800, 2020, 1)
