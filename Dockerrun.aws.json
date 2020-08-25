@@ -29,14 +29,7 @@
           "name": "MANAGERS",
           "value": "[('Benjamin Rotendahl', 'Benjamin@Rotendahl.dk')]"
         }
-      ],
-      "healthCheck": {
-        "command": ["CMD-SHELL", "curl -f 0.0.0.0:8000 || exit 1"],
-        "interval": 30,
-        "timeout": 30,
-        "retries": 5,
-        "startPeriod": 120
-      }
+      ]
     },
     {
       "name": "nginx",
@@ -47,7 +40,7 @@
       "dependsOn": [
         {
           "containerName": "visualizer",
-          "condition": "HEALTHY"
+          "condition": "START"
         }
       ]
     },
