@@ -33,8 +33,9 @@ pydotplus = "2.0.2"
 django-extensions = "3.0.5"
 isort = "5.3.2"
 selenium = "3.141.0"
-bpython = "^0.19"
-whitenoise = "^5.1.0"
+bpython = "0.19"
+whitenoise = "5.1.0"
+redis = "3.5.3"
 
 
 [tool.black]

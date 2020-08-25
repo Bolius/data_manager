@@ -1,7 +1,10 @@
 from django.test import TestCase
 
-from data_models.models import BBR
-
+from data_models.visualizer.data_fetching import (
+    get_time_data,
+    get_rolling_avgs,
+    accumulated_sum_for_catatgorical,
+)
 from .factories import add_houses
 
 
@@ -27,7 +30,7 @@ class BBRTimeTest(TestCase):
         self.h2.reconstruction_year = None
         self.h3.reconstruction_year = 1992
         [h.save() for h in self.houses]
-        data = BBR.get_time_data()
+        data = get_time_data()
         self.assertEqual([1990, 1991, 1992], data["time_range"])
         self.assertEqual([1, 1, 3], data["houses_per_year"])
         self.assertEqual([0, 1, 2], data["recon_per_year"])
@@ -43,7 +46,7 @@ class BBRTimeTest(TestCase):
         self.h3.building_area = 150
 
         [h.save() for h in self.houses]
-        data = BBR.get_rolling_avgs()
+        data = get_rolling_avgs()
         self.assertEqual(list(range(1990, 1997)), data["time_range"])
         self.assertEqual(
             [75.0, 100.0, 100.0, 100.0, 100.0, 100.0, 125.0], data["bulding_area"]
@@ -65,7 +68,7 @@ class BBRTimeTest(TestCase):
             {"0": 0, "E": 2, "F": 0, "G": 0, "H": 0},
             {"0": 0, "E": 2, "F": 1, "G": 0, "H": 0},
         ]
-        actual = BBR.accumulated_sum_for_catatgorical("kitchen_facility", 1990, 1992)
+        actual = accumulated_sum_for_catatgorical("kitchen_facility", 1990, 1992)
         self.assertEqual(len(expected), len(actual))
         self.assertEqual(expected[0], actual[0])
         self.assertEqual(expected, actual)
