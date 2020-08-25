@@ -1,7 +1,7 @@
-from .map import MAP_GRAPH
-from .scatter import SCATTER_GRAPH
 from .histogram import HISTOGRAM_GRAPH
+from .map import MAP_GRAPH
 from .municipality_map import MUNICIPALITY_GRAPH
+from .scatter import SCATTER_GRAPH
 from .time import TIME_GRAPH
 
 __all__ = [

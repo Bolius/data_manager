@@ -1,8 +1,8 @@
 from .graphs import (
-    MAP_GRAPH,
-    SCATTER_GRAPH,
     HISTOGRAM_GRAPH,
+    MAP_GRAPH,
     MUNICIPALITY_GRAPH,
+    SCATTER_GRAPH,
     TIME_GRAPH,
 )
 

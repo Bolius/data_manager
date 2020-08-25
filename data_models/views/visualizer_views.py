@@ -1,14 +1,12 @@
-from django.core.management import call_command
+# from django.core.management import call_command
 from django.shortcuts import render
 
 from data_models.models import House
-
-
 from data_models.visualizer import (
-    MAP_GRAPH,
-    SCATTER_GRAPH,
     HISTOGRAM_GRAPH,
+    MAP_GRAPH,
     MUNICIPALITY_GRAPH,
+    SCATTER_GRAPH,
     TIME_GRAPH,
 )
 
@@ -18,7 +16,7 @@ def scatter(request):
 
 
 def TimeView(request):
-    return render(request, "data_models/time.html", {"graph": 1})
+    return render(request, "data_models/time.html", {TIME_GRAPH})
 
 
 def map(request):
@@ -26,7 +24,7 @@ def map(request):
 
 
 def MunicipalityMapView(request):
-    return render(request, "data_models/municipality_map.html", {})
+    return render(request, "data_models/municipality_map.html", {MUNICIPALITY_GRAPH})
 
 
 def HistogramView(request):

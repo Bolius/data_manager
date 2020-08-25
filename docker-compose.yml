@@ -14,8 +14,6 @@ services:
     depends_on:
       - database
       - selenium
-    networks:
-      - webnet
     environment:
       - GEO_KEY=$GEO_KEY
       - SECRET_KEY=$SECRET_KEY
@@ -26,8 +24,6 @@ services:
       - POSTGRES_PASSWORD=$POSTGRES_PASSWORD
   database:
     image: postgis/postgis:12-master
-    networks:
-      - webnet
     volumes:
       - postgis_orm:/var/lib/postgresql/data/
     environment:
@@ -43,21 +39,16 @@ services:
 
   nginx:
     build:
-      context: .
+      context: nginx
     ports:
-      - 8000:80
+      - 5000:80
     restart: always
     depends_on:
       - web
   selenium:
     image: selenium/standalone-chrome
-    networks:
-      - webnet
     ports:
       - 4444
 
 volumes:
   postgis_orm:
-
-networks:
-  webnet:
