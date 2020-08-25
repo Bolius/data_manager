@@ -31,7 +31,7 @@
         }
       ],
       "healthCheck": {
-        "command": ["CMD-SHELL", "curl -f host.docker.internal:8000 || exit 1"],
+        "command": ["CMD-SHELL", "curl -f data_manager:8000 || exit 1"],
         "interval": 30,
         "timeout": 30,
         "retries": 5,
