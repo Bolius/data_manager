@@ -2,7 +2,7 @@
   "AWSEBDockerrunVersion": 2,
   "containerDefinitions": [
     {
-      "name": "data_manager",
+      "name": "visualizer",
       "image": "rotendahl/bolius",
       "essential": true,
       "memoryReservation": 5,
@@ -41,12 +41,12 @@
     {
       "name": "nginx",
       "image": "rotendahl/visualizer_nginx",
-      "links": ["data_manager"],
+      "links": ["visualizer"],
       "memoryReservation": 5,
       "portMappings": [{ "containerPort": 80, "hostPort": 80 }],
       "dependsOn": [
         {
-          "containerName": "data_manager",
+          "containerName": "visualizer",
           "condition": "HEALTHY"
         }
       ]
