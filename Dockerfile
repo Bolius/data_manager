@@ -21,7 +21,7 @@ RUN pip install --upgrade pip \
     && pip install poetry \
     && poetry install
 
-EXPOSE 80
+EXPOSE 8000
 
 ARG arg_debug_mode=False
 ENV DEBUG=$arg_debug_mode
@@ -33,4 +33,9 @@ ENTRYPOINT ["/app/entrypoint.sh"]
 COPY . /app
 
 
-CMD ["gunicorn", "data_store.wsgi:application", "--bind", "0.0.0.0:8000", "--workers" , "4"]
+CMD ["gunicorn", "data_store.wsgi:application", \
+     "--bind", "0.0.0.0:8000", \
+     "--workers" , "4",  \
+     "--worker-tmp-dir", "/dev/shm", \
+     "--threads", "4", \
+     "--worker-class" ,"gthread"]
