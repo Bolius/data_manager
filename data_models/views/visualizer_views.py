@@ -3,20 +3,18 @@ from django.shortcuts import render
 
 from data_models.models import House
 
-""" A dirty hack around plotly loading apps before migrations are applied """
-# TODO Make a better way for this
-with open("/tmp/migrate_status", "w") as f:
-    call_command("showmigrations", stdout=f)
-with open("/tmp/migrate_status", "r") as f:
-    lines = " ".join(f.readlines())
-if "[ ]" not in lines:
-    from data_models.dash.histogram import app as HistogramVis  # noqa
-    from data_models.dash.municipality_map import app as MuniVis  # noqa
-    from data_models.dash.time import app as TimeVis  # noqa
+
+from data_models.visualizer import (
+    MAP_GRAPH,
+    SCATTER_GRAPH,
+    HISTOGRAM_GRAPH,
+    MUNICIPALITY_GRAPH,
+    TIME_GRAPH,
+)
 
 
 def scatter(request):
-    return render(request, "data_models/scatter.html", {})
+    return render(request, "data_models/scatter.html", {SCATTER_GRAPH})
 
 
 def TimeView(request):
@@ -24,7 +22,7 @@ def TimeView(request):
 
 
 def map(request):
-    return render(request, "data_models/map.html", {})
+    return render(request, "data_models/map.html", {MAP_GRAPH})
 
 
 def MunicipalityMapView(request):
@@ -32,7 +30,7 @@ def MunicipalityMapView(request):
 
 
 def HistogramView(request):
-    return render(request, "data_models/histogram.html")
+    return render(request, "data_models/histogram.html", {HISTOGRAM_GRAPH})
 
 
 def address_enter(request):

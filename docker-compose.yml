@@ -6,11 +6,11 @@ services:
       context: .
       args:
         - arg_debug_mode=True
-    command: ./manage.py runserver web:80
+    command: ./manage.py runserver web:8000
     volumes:
       - .:/app
     ports:
-      - "8000:80"
+      - "8000:8000"
     depends_on:
       - database
       - selenium
@@ -41,6 +41,14 @@ services:
       timeout: 5s
       retries: 5
 
+  nginx:
+    build:
+      context: .
+    ports:
+      - 8000:80
+    restart: always
+    depends_on:
+      - web
   selenium:
     image: selenium/standalone-chrome
     networks:
