@@ -7,7 +7,7 @@
       "essential": true,
       "memoryReservation": 5,
       "links": ["database"],
-      "portMappings": [{ "hostPort": 80, "containerPort": 80 }],
+      "portMappings": [{ "containerPort": 8000, "hostPort": 8000 }],
       "mountPoints": [
         {
           "sourceVolume": "scratch_storage",
@@ -29,6 +29,26 @@
           "name": "MANAGERS",
           "value": "[('Benjamin Rotendahl', 'Benjamin@Rotendahl.dk')]"
         }
+      ],
+      "healthCheck": {
+        "command": ["CMD-SHELL", "curl -f data_manager:8000 || exit 1"],
+        "interval": 30,
+        "timeout": 30,
+        "retries": 5,
+        "startPeriod": 120
+      }
+    },
+    {
+      "name": "nginx",
+      "image": "rotendahl/visualizer_nginx",
+      "links": ["data_manager"],
+      "memoryReservation": 5,
+      "portMappings": [{ "containerPort": 80, "hostPort": 80 }],
+      "dependsOn": [
+        {
+          "containerName": "data_manager",
+          "condition": "HEALTHY"
+        }
       ]
     },
     {
@@ -36,7 +56,7 @@
       "image": "postgis/postgis:12-master",
       "memoryReservation": 5,
       "essential": true,
-      "portMappings": [{ "hostPort": 5432, "containerPort": 5432 }],
+      "portMappings": [{ "containerPort": 5432 }],
       "environment": [{ "name": "POSTGRES_DB", "value": "data_manager" }],
       "mountPoints": [
         {
