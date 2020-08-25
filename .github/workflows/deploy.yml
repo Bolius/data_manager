@@ -19,7 +19,7 @@ jobs:
           tag_with_sha: true
           tag_with_ref: true
 
-      - name: Push client to docker hub
+      - name: Push nginx to docker hub
         uses: docker/build-push-action@v1
         with:
           dockerfile: nginx/Dockerfile
