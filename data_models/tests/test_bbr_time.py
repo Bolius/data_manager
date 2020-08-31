@@ -1,10 +1,11 @@
 from django.test import TestCase
 
 from data_models.visualizer.data_fetching import (
-    get_time_data,
-    get_rolling_avgs,
     accumulated_sum_for_catatgorical,
+    get_rolling_avgs,
+    get_time_data,
 )
+
 from .factories import add_houses
 
 

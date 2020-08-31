@@ -9,7 +9,6 @@ from plotly import graph_objects as go
 from data_models.models import BBR, Municipality
 from data_models.visualizer.data_fetching import get_municipality_data
 
-
 MUNICIPALITY_GRAPH = DjangoDash("municipality_map")
 
 

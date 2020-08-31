@@ -1,6 +1,7 @@
 # from django.core.management import call_command
-from django.shortcuts import render
 from django.core.management import call_command
+from django.shortcuts import render
+
 from data_models.models import House
 
 
