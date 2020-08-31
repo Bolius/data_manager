@@ -40,9 +40,9 @@ jobs:
       - name: Builds the stack
         run: docker-compose build
       - name: Generating coverage
-        run: docker-compose run data_manager coverage run --source='.' manage.py test
+        run: docker-compose run visualizer coverage run --source='.' manage.py test
       - name: Converting coverage
-        run: docker-compose run data_manager coverage xml
+        run: docker-compose run visualizer coverage xml
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v1.0.12
         with:

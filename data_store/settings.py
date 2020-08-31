@@ -5,6 +5,7 @@
   The file starts with reading all enviroment variables, and then configures
   the settings.
 """
+import logging
 import os
 
 import dj_database_url
@@ -138,3 +139,13 @@ with open("assets/data_exploration_query.graphql", "r") as queryfile:
 META_QUERY = ""
 with open("assets/data_exploration_info_query.graphql", "r") as queryfile:
     META_QUERY = "".join(queryfile.readlines())
+
+
+sh = logging.StreamHandler()
+sh.setFormatter(logging.Formatter("%(asctime)s - %(levelname)s - %(message)s", "", "%"))
+
+
+log = logging.getLogger("Visualizer")
+log.addHandler(sh)
+log.setLevel(logging.DEBUG)
+log.info("Starting Visualizer")

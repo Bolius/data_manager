@@ -1,34 +1,48 @@
 # from django.core.management import call_command
+from django.core.management import call_command
 from django.shortcuts import render
 
 from data_models.models import House
-from data_models.visualizer import (
-    HISTOGRAM_GRAPH,
-    MAP_GRAPH,
-    MUNICIPALITY_GRAPH,
-    SCATTER_GRAPH,
-    TIME_GRAPH,
-)
+
+
+def has_migrated():
+    """ A dirty hack around plotly loading apps before migrations are applied """
+    # TODO Make a better way for this
+    with open("/tmp/migrate_status", "w") as f:
+        call_command("showmigrations", stdout=f)
+    with open("/tmp/migrate_status", "r") as f:
+        lines = " ".join(f.readlines())
+    return "[ ]" not in lines
+
+
+if has_migrated():
+    from data_models.visualizer import (  # noqa
+        HISTOGRAM_GRAPH,
+        MAP_GRAPH,
+        MUNICIPALITY_GRAPH,
+        SCATTER_GRAPH,
+        TIME_GRAPH,
+    )
 
 
 def scatter(request):
-    return render(request, "data_models/scatter.html", {SCATTER_GRAPH})
+    return render(request, "data_models/scatter.html")
 
 
 def TimeView(request):
-    return render(request, "data_models/time.html", {TIME_GRAPH})
+    return render(request, "data_models/time.html")
 
 
 def map(request):
-    return render(request, "data_models/map.html", {MAP_GRAPH})
+    return render(request, "data_models/map.html")
 
 
 def MunicipalityMapView(request):
-    return render(request, "data_models/municipality_map.html", {MUNICIPALITY_GRAPH})
+    return render(request, "data_models/municipality_map.html")
 
 
 def HistogramView(request):
-    return render(request, "data_models/histogram.html", {HISTOGRAM_GRAPH})
+    return render(request, "data_models/histogram.html")
 
 
 def address_enter(request):

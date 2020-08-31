@@ -1,13 +1,25 @@
 import dash_core_components as dcc
 import dash_html_components as html
+import geojson
 from dash.dependencies import Input, Output
+from django.core.serializers import serialize
 from django_plotly_dash import DjangoDash
 from plotly import graph_objects as go
 
 from data_models.models import BBR, Municipality
+from data_models.visualizer.data_fetching import get_municipality_data
 
 MUNICIPALITY_GRAPH = DjangoDash("municipality_map")
 
+
+GEO_DATA = geojson.loads(
+    serialize(
+        "geojson",
+        Municipality.objects.all(),
+        geometry_field="geo_boundary",
+        fields=("name", "admin_code"),
+    )
+)
 
 MUNICIPALITY_GRAPH.layout = html.Div(
     children=[
@@ -75,10 +87,10 @@ MUNICIPALITY_GRAPH.layout = html.Div(
     Output("color-map", "figure"), [Input("map-dropdown", "value")],
 )
 def update_output(value):
-    muni_stats = Municipality.get_stats()
+    muni_stats = get_municipality_data()
     fig = go.Figure(
         go.Choroplethmapbox(
-            geojson=muni_stats["geo_data"],
+            geojson=GEO_DATA,
             locations=muni_stats["data"].admin_code,
             z=muni_stats["muni_averages"][value],
             colorscale="Viridis",
@@ -107,7 +119,7 @@ def update_output(value):
     [Input("color-map", "clickData"), Input("bar-dropdown", "value")],
 )
 def update_bar(municipality, cat_field):
-    muni_stats = Municipality.get_stats()
+    muni_stats = get_municipality_data()
     if municipality is None:
         fig = go.Figure()
         fig.update_layout(

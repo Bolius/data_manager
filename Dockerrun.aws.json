@@ -18,6 +18,10 @@
         {
           "containerName": "database",
           "condition": "START"
+        },
+        {
+          "containerName": "redis",
+          "condition": "START"
         }
       ],
       "environment": [
@@ -43,6 +47,13 @@
           "condition": "START"
         }
       ]
+    },
+    {
+      "name": "redis",
+      "image": "redis:6",
+      "links": ["visualizer"],
+      "memoryReservation": 5,
+      "portMappings": [{ "hostPort": 6379 }]
     },
     {
       "name": "database",

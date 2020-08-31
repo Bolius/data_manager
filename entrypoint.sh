@@ -9,5 +9,6 @@ python scripts/check_database_connection.py
 
 python manage.py migrate
 python manage.py collectstatic --no-input
+python manage.py populate_redis
 
 exec "$@"
