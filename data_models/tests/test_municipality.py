@@ -1,6 +1,7 @@
 from django.test import TestCase
 
 from data_models.models import House, Municipality
+from data_models.visualizer.data_fetching.fetch_municipality_map import compute_stats
 
 
 class MunicipalityTest(TestCase):
@@ -23,7 +24,7 @@ class MunicipalityTest(TestCase):
         self.assertEqual(len(Municipality.objects.all()), self.TOTAL_MUNICIPALITIES)
 
     def test_get_stats(self):
-        stats = Municipality.get_stats()
+        stats = compute_stats()
         self.assertEqual(
             stats["data"].loc[self.h2.municipality.admin_code, "nr_houses"], 1
         )

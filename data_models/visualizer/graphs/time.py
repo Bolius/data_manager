@@ -4,6 +4,11 @@ from dash.dependencies import Input, Output
 from django_plotly_dash import DjangoDash
 
 from data_models.models import BBR
+from data_models.visualizer.data_fetching import (
+    accumulated_sum_for_catatgorical,
+    get_rolling_avgs,
+    get_time_data,
+)
 
 
 def categorical_to_traces(categorical, time_range, field):
@@ -26,7 +31,7 @@ def categorical_to_traces(categorical, time_range, field):
 
 
 def get_accumulated_figure():
-    data = BBR.get_time_data()
+    data = get_time_data()
     fig = {
         "data": [
             {
@@ -52,7 +57,7 @@ def get_accumulated_figure():
     }
     fig["data"].extend(
         categorical_to_traces(
-            BBR.accumulated_sum_for_catatgorical(
+            accumulated_sum_for_catatgorical(
                 "kitchen_facility", data["time_range"][0], data["time_range"][-1],
             ),
             data["time_range"],
@@ -61,7 +66,7 @@ def get_accumulated_figure():
     )
     fig["data"].extend(
         categorical_to_traces(
-            BBR.accumulated_sum_for_catatgorical(
+            accumulated_sum_for_catatgorical(
                 "heat_install", data["time_range"][0], data["time_range"][-1],
             ),
             data["time_range"],
@@ -70,7 +75,7 @@ def get_accumulated_figure():
     )
     fig["data"].extend(
         categorical_to_traces(
-            BBR.accumulated_sum_for_catatgorical(
+            accumulated_sum_for_catatgorical(
                 "roofing_material", data["time_range"][0], data["time_range"][-1],
             ),
             data["time_range"],
@@ -79,7 +84,7 @@ def get_accumulated_figure():
     )
     fig["data"].extend(
         categorical_to_traces(
-            BBR.accumulated_sum_for_catatgorical(
+            accumulated_sum_for_catatgorical(
                 "property_type", data["time_range"][0], data["time_range"][-1],
             ),
             data["time_range"],
@@ -90,7 +95,7 @@ def get_accumulated_figure():
 
 
 def get_rolling_figure():
-    rolling_data = BBR.get_rolling_avgs()
+    rolling_data = get_rolling_avgs()
     return {
         "data": [
             {
