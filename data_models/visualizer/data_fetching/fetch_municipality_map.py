@@ -1,5 +1,4 @@
 import json
-from datetime import datetime
 
 import pandas as pd
 from django.db.models import Avg, Count
@@ -21,15 +20,13 @@ def get_municipality_data():
         log.info("GOT DATA FROM REDIS")
         return stats
     else:
-        start = datetime.now()
         stats = compute_stats()
+        log.info("GOT DATA FROM REDIS")
         data = {
             "data": stats["data"].to_json(),
             "categorical": stats["categorical"],
             "muni_averages": stats["muni_averages"].to_json(),
         }
-        end = datetime.now()
-        log.info(f"Fetching data took {end - start}")
         redis_client.set("municipality_map_data", json.dumps(data))
         return stats
 

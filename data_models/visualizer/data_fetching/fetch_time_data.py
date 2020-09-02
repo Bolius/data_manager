@@ -1,6 +1,27 @@
+import json
+
 from django.db.models import Avg, Count
+from redis import Redis
 
 from data_models.models import BBR
+from data_store.settings import log
+
+redis_client = Redis(host="redis")
+
+
+def compute_time_data():
+    log.info("Computing time data")
+    return {"time": changes_over_time(), "rolling_avgs": get_rolling_avgs()}
+
+
+def get_time_data():
+    if redis_client.exists("time_graph_data"):
+        log.info("Got time data from redis")
+        return json.loads(redis_client.get("time_graph_data"))
+    else:
+        data = compute_time_data()
+        redis_client.set("time_graph_data", json.dumps(data))
+        return data
 
 
 def _fill_zeroes(data):
@@ -19,6 +40,7 @@ def _fill_zeroes(data):
 
 
 def accumulated_sum_for_catatgorical(field, min_year, max_year):
+    # TODO cache this?
     year_value = list(
         BBR.objects.values(field, "construction_year").order_by("construction_year")
     )
@@ -39,15 +61,16 @@ def accumulated_sum_for_catatgorical(field, min_year, max_year):
     return result
 
 
-def get_time_data():
+def changes_over_time():
     build_years = BBR.objects.values("construction_year").order_by("construction_year")
-    if len(build_years) == 0:
-        min_year = 0
-        max_year = 0
-    else:
-        min_year = build_years.first()["construction_year"]
-        max_year = build_years.last()["construction_year"]
-
+    min_year, max_year = (
+        (
+            build_years.first()["construction_year"],
+            build_years.last()["construction_year"],
+        )
+        if len(build_years) > 0
+        else (0, 0)
+    )
     build_counts = {}
     for year in build_years.annotate(count=Count("construction_year")):
         build_counts[year["construction_year"]] = year["count"]
