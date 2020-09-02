@@ -20,6 +20,7 @@ def get_municipality_data():
         log.info("GOT DATA FROM REDIS")
         return stats
     else:
+        stats = compute_stats()
         log.info("GOT DATA FROM REDIS")
         data = {
             "data": stats["data"].to_json(),

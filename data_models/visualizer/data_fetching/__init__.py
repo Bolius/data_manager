@@ -1,8 +1,8 @@
 from .fetch_municipality_map import get_municipality_data
 from .fetch_time_data import (
     accumulated_sum_for_catatgorical,
-    get_time_data,
     compute_time_data,
+    get_time_data,
 )
 
 __all__ = [
