@@ -13,7 +13,7 @@ RUN wget -O \
 
 
 COPY pyproject.toml  pyproject.toml
-COPY poetry.lock poetry.lock
+# COPY poetry.lock poetry.lock
 
 ENV POETRY_VIRTUALENVS_CREATE false
 
