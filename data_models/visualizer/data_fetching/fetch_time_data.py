@@ -1,7 +1,9 @@
-from django.db.models import Avg, Count
 import json
-from data_models.models import BBR
+
+from django.db.models import Avg, Count
 from redis import Redis
+
+from data_models.models import BBR
 from data_store.settings import log
 
 redis_client = Redis(host="redis")
