@@ -6,7 +6,6 @@ from django_plotly_dash import DjangoDash
 from data_models.models import BBR
 from data_models.visualizer.data_fetching import (
     accumulated_sum_for_catatgorical,
-    get_rolling_avgs,
     get_time_data,
 )
 
@@ -31,7 +30,7 @@ def categorical_to_traces(categorical, time_range, field):
 
 
 def get_accumulated_figure():
-    data = get_time_data()
+    data = get_time_data()["time"]
     fig = {
         "data": [
             {
@@ -95,7 +94,7 @@ def get_accumulated_figure():
 
 
 def get_rolling_figure():
-    rolling_data = get_rolling_avgs()
+    rolling_data = get_time_data()["rolling_avgs"]
     return {
         "data": [
             {

@@ -2,8 +2,7 @@ from django.test import TestCase
 
 from data_models.visualizer.data_fetching import (
     accumulated_sum_for_catatgorical,
-    get_rolling_avgs,
-    get_time_data,
+    compute_time_data,
 )
 
 from .factories import add_houses
@@ -31,7 +30,7 @@ class BBRTimeTest(TestCase):
         self.h2.reconstruction_year = None
         self.h3.reconstruction_year = 1992
         [h.save() for h in self.houses]
-        data = get_time_data()
+        data = compute_time_data()["time"]
         self.assertEqual([1990, 1991, 1992], data["time_range"])
         self.assertEqual([1, 1, 3], data["houses_per_year"])
         self.assertEqual([0, 1, 2], data["recon_per_year"])
@@ -47,7 +46,7 @@ class BBRTimeTest(TestCase):
         self.h3.building_area = 150
 
         [h.save() for h in self.houses]
-        data = get_rolling_avgs()
+        data = compute_time_data()["rolling_avgs"]
         self.assertEqual(list(range(1990, 1997)), data["time_range"])
         self.assertEqual(
             [75.0, 100.0, 100.0, 100.0, 100.0, 100.0, 125.0], data["bulding_area"]
