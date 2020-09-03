@@ -11,11 +11,18 @@ class Command(BaseCommand):
         parser.add_argument("id_file", type=str)
 
     def handle(self, *args, **options):
-        with open(options["id_file"], "r") as ids:
-            for line in tqdm(ids):
-                try:
-                    if len(line) > 10:
-                        House.add_house(access_id=line[:-1])
-                except Exception as e:
-                    print(e)
-                    continue
+        add_ids(options["id_file"])
+
+
+def add_ids(file):
+    all_ids = set(House.objects.all().values("access_id"))
+    with open(file, "r") as ids:
+        for line in tqdm(ids):
+            try:
+                if len(line) > 10:
+                    id = line[:-1]
+                    if id not in all_ids:
+                        House.add_house(access_id=id)
+            except Exception as e:
+                print(e)
+                continue
