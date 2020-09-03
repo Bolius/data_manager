@@ -15,7 +15,7 @@ class Command(BaseCommand):
 
 
 def add_ids(file):
-    all_ids = set(House.objects.all().values("access_id"))
+    all_ids = set(House.objects.all().values_list("access_id", flat=True))
     with open(file, "r") as ids:
         for line in tqdm(ids):
             try:
