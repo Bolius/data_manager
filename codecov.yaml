@@ -1,0 +1,2 @@
+ignore:
+  - "data_models/tests" # wildcards accepted
