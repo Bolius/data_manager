@@ -18,32 +18,6 @@ from .categoricalMapper import (
     WATER_SUPPLY_CHOICES,
 )
 
-integer_fields = [  # TODO remove this
-    "building_area",
-    "ground_area",
-    "garage_area",
-    "carport_area",
-    "outhouse_area",
-    "roof_area",
-    "commercial_area",
-    "other_area",
-]
-
-categorical_fields = [  # TODO remove this
-    "heat_install",
-    "heat_type",
-    "heat_supply",
-    "water_supply",
-    "wall_material",
-    "energy_type",
-    "roofing_material",
-    "property_type",
-    "kitchen_facility",
-    "toilet_facility",
-    "bathing_facility",
-    "residential_type",
-]
-
 
 class BBR(models.Model):  # TODO Rename to bulding / house
     integer_fields = [
