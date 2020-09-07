@@ -231,7 +231,7 @@ description = "A high-level Python Web framework that encourages rapid developme
 name = "django"
 optional = false
 python-versions = ">=3.6"
-version = "3.1"
+version = "3.1.1"
 
 [package.dependencies]
 asgiref = ">=3.2.10,<3.3.0"
@@ -908,7 +908,7 @@ version = "5.1.0"
 brotli = ["brotli"]
 
 [metadata]
-content-hash = "47ca65da233b8d1024c4efde90cdb82a7e686876e7d1be38fd5e2bcdde0dab8c"
+content-hash = "e41a0b93211e9e9e5fc94080f1f04502ee08a2b4a75370db3271b31f7198f8a5"
 lock-version = "1.0"
 python-versions = "^3.8"
 
@@ -1051,8 +1051,8 @@ dj-email-url = [
     {file = "dj_email_url-1.0.1-py2.py3-none-any.whl", hash = "sha256:557c07b3039befdc1c561c4038b155d659c09f996d5e33c91189c2e23969da90"},
 ]
 django = [
-    {file = "Django-3.1-py3-none-any.whl", hash = "sha256:1a63f5bb6ff4d7c42f62a519edc2adbb37f9b78068a5a862beff858b68e3dc8b"},
-    {file = "Django-3.1.tar.gz", hash = "sha256:2d390268a13c655c97e0e2ede9d117007996db692c1bb93eabebd4fb7ea7012b"},
+    {file = "Django-3.1.1-py3-none-any.whl", hash = "sha256:b5fbb818e751f660fa2d576d9f40c34a4c615c8b48dd383f5216e609f383371f"},
+    {file = "Django-3.1.1.tar.gz", hash = "sha256:59c8125ca873ed3bdae9c12b146fbbd6ed8d0f743e4cf5f5817af50c51f1fc2f"},
 ]
 django-cors-headers = [
     {file = "django-cors-headers-3.4.0.tar.gz", hash = "sha256:f5218f2f0bb1210563ff87687afbf10786e080d8494a248e705507ebd92d7153"},
