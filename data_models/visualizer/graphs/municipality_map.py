@@ -84,7 +84,8 @@ MUNICIPALITY_GRAPH.layout = html.Div(
 
 
 @MUNICIPALITY_GRAPH.callback(
-    Output("color-map", "figure"), [Input("map-dropdown", "value")],
+    Output("color-map", "figure"),
+    [Input("map-dropdown", "value")],
 )
 def update_output(value):
     muni_stats = get_municipality_data()

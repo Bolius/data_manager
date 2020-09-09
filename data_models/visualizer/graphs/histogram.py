@@ -82,7 +82,10 @@ header = [
     ),
     html.Div(
         [
-            html.P(["Vælg kategori"], style={"textAlign": "center", "font  ": "bold"},),
+            html.P(
+                ["Vælg kategori"],
+                style={"textAlign": "center", "font  ": "bold"},
+            ),
             dcc.Dropdown(
                 id="category-choice",
                 options=[{"label": c, "value": c} for c in BBR.categorical_fields],
@@ -106,7 +109,12 @@ HISTOGRAM_GRAPH.layout = html.Div(
             },
         ),
         html.Div(
-            [html.Div(id="table"), dcc.Graph(id="indicator-graphic",)],
+            [
+                html.Div(id="table"),
+                dcc.Graph(
+                    id="indicator-graphic",
+                ),
+            ],
             style={"width": "80%", "margin": "auto"},
         ),
         html.Div(

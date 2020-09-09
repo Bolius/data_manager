@@ -40,7 +40,9 @@ def access_id_to_address(access_id, small_resp=False):
 
 def dawa_id_to_bbr(dawa_id):
     response = requests.request(
-        "GET", "https://dawa.aws.dk/bbrlight/enheder", params={"adresseid": dawa_id},
+        "GET",
+        "https://dawa.aws.dk/bbrlight/enheder",
+        params={"adresseid": dawa_id},
     )
     if response.status_code != 200:
         raise ValueError(f"DAWA ID {dawa_id} not found")
@@ -61,7 +63,9 @@ def get_buildings_from_address_id(address_id):
     ground_id = response.json()[0]["Bygning_id"]
 
     response = requests.request(
-        "GET", "https://dawa.aws.dk/bbrlight/bygninger", params={"id": ground_id},
+        "GET",
+        "https://dawa.aws.dk/bbrlight/bygninger",
+        params={"id": ground_id},
     )
     if response.status_code != 200:
         raise ValueError(f"{ground_id=} not found")

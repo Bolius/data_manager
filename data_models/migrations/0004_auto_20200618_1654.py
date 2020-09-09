@@ -13,18 +13,54 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RemoveField(model_name="bbr", name="address",),
-        migrations.RemoveField(model_name="bbr", name="bbr_categorical",),
-        migrations.RemoveField(model_name="bbr", name="bbr_numeric",),
-        migrations.RemoveField(model_name="bbr", name="kvhx",),
-        migrations.RemoveField(model_name="bbr", name="zip_code",),
-        migrations.RemoveField(model_name="house", name="bbr",),
-        migrations.RemoveField(model_name="house", name="cities",),
-        migrations.RemoveField(model_name="house", name="lat",),
-        migrations.RemoveField(model_name="house", name="lon",),
-        migrations.RemoveField(model_name="house", name="soil_type",),
-        migrations.RemoveField(model_name="house", name="utm_x",),
-        migrations.RemoveField(model_name="house", name="utm_y",),
+        migrations.RemoveField(
+            model_name="bbr",
+            name="address",
+        ),
+        migrations.RemoveField(
+            model_name="bbr",
+            name="bbr_categorical",
+        ),
+        migrations.RemoveField(
+            model_name="bbr",
+            name="bbr_numeric",
+        ),
+        migrations.RemoveField(
+            model_name="bbr",
+            name="kvhx",
+        ),
+        migrations.RemoveField(
+            model_name="bbr",
+            name="zip_code",
+        ),
+        migrations.RemoveField(
+            model_name="house",
+            name="bbr",
+        ),
+        migrations.RemoveField(
+            model_name="house",
+            name="cities",
+        ),
+        migrations.RemoveField(
+            model_name="house",
+            name="lat",
+        ),
+        migrations.RemoveField(
+            model_name="house",
+            name="lon",
+        ),
+        migrations.RemoveField(
+            model_name="house",
+            name="soil_type",
+        ),
+        migrations.RemoveField(
+            model_name="house",
+            name="utm_x",
+        ),
+        migrations.RemoveField(
+            model_name="house",
+            name="utm_y",
+        ),
         migrations.AddField(
             model_name="bbr",
             name="accsses_address",

@@ -57,7 +57,9 @@ def get_accumulated_figure():
     fig["data"].extend(
         categorical_to_traces(
             accumulated_sum_for_catatgorical(
-                "kitchen_facility", data["time_range"][0], data["time_range"][-1],
+                "kitchen_facility",
+                data["time_range"][0],
+                data["time_range"][-1],
             ),
             data["time_range"],
             "kitchen_facility",
@@ -66,7 +68,9 @@ def get_accumulated_figure():
     fig["data"].extend(
         categorical_to_traces(
             accumulated_sum_for_catatgorical(
-                "heat_install", data["time_range"][0], data["time_range"][-1],
+                "heat_install",
+                data["time_range"][0],
+                data["time_range"][-1],
             ),
             data["time_range"],
             "heat_install",  # TODO is this right?
@@ -75,7 +79,9 @@ def get_accumulated_figure():
     fig["data"].extend(
         categorical_to_traces(
             accumulated_sum_for_catatgorical(
-                "roofing_material", data["time_range"][0], data["time_range"][-1],
+                "roofing_material",
+                data["time_range"][0],
+                data["time_range"][-1],
             ),
             data["time_range"],
             "roofing_material",
@@ -84,7 +90,9 @@ def get_accumulated_figure():
     fig["data"].extend(
         categorical_to_traces(
             accumulated_sum_for_catatgorical(
-                "property_type", data["time_range"][0], data["time_range"][-1],
+                "property_type",
+                data["time_range"][0],
+                data["time_range"][-1],
             ),
             data["time_range"],
             "property_type",
@@ -165,7 +173,9 @@ TIME_GRAPH.layout = html.Div(
             rullende gennemsnit over data'en"""
         ),
         dcc.Graph(
-            id="time-graph", figure=get_accumulated_figure(), style={"height": "600px"},
+            id="time-graph",
+            figure=get_accumulated_figure(),
+            style={"height": "600px"},
         ),
         dcc.RadioItems(
             id="cum-or-avg",

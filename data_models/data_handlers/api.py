@@ -28,7 +28,7 @@ def _getExtendedInfo(match):
 def _getBBRInfo(match):
     """Url : apps.conzoom.eu/api/v1/values/dk/unit/b6c20cff-8399-4591-934c-
     6774354f068a?apikey=9a8cfab82206e05083dbd1112adc06d5.
-  """
+    """
     unadr = str(match["values"]["unadr_key"])
     req = "https://apps.conzoom.eu/api/v1/values/dk/unit?where=unadr_key="
     req += unadr + "&apikey=" + settings.GEO_KEY
