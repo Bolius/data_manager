@@ -199,7 +199,7 @@ class BBR(models.Model):  # TODO Rename to bulding / house
         building.save()
 
     @staticmethod
-    def get_scatter_points(
+    def get_scatter_points(  # TODO DELETE THIS
         xParam, yParam, valFromX, valToX, valFromY, valToY, yearValue
     ):
         # TODO: check security
