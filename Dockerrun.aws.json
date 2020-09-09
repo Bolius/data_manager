@@ -59,7 +59,7 @@
       "image": "postgis/postgis:12-master",
       "memoryReservation": 5,
       "essential": true,
-      "portMappings": [{ "containerPort": 5432 }],
+      "portMappings": [{ "containerPort": 5432, "hostPort": 5432 }],
       "environment": [{ "name": "POSTGRES_DB", "value": "data_manager" }],
       "mountPoints": [
         {

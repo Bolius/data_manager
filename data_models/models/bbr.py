@@ -96,10 +96,16 @@ class BBR(models.Model):  # TODO Rename to bulding / house
         default="0",
     )
     water_supply = models.CharField(
-        "Vandforsyning", max_length=2, choices=WATER_SUPPLY_CHOICES, default="0",
+        "Vandforsyning",
+        max_length=2,
+        choices=WATER_SUPPLY_CHOICES,
+        default="0",
     )
     wall_material = models.CharField(
-        "Ydervægs Materiale", max_length=2, choices=WALL_MATERIAL_CHOICES, default="0",
+        "Ydervægs Materiale",
+        max_length=2,
+        choices=WALL_MATERIAL_CHOICES,
+        default="0",
     )
 
     roofing_material = models.CharField(
@@ -110,7 +116,10 @@ class BBR(models.Model):  # TODO Rename to bulding / house
     )
 
     property_type = models.CharField(
-        "Boligtype", max_length=2, choices=PROPERTY_TYPE_CHOICES, default="0",
+        "Boligtype",
+        max_length=2,
+        choices=PROPERTY_TYPE_CHOICES,
+        default="0",
     )
 
     kitchen_facility = models.CharField(
@@ -211,7 +220,9 @@ class BBR(models.Model):  # TODO Rename to bulding / house
         )
 
         exec(
-            query, globals(), _locals,
+            query,
+            globals(),
+            _locals,
         )
 
         bbr = _locals.get("hs")

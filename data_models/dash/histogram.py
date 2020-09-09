@@ -116,7 +116,12 @@ app.layout = html.Div(
             },
         ),
         html.Div(
-            [html.Div(id="table"), dcc.Graph(id="indicator-graphic",)],
+            [
+                html.Div(id="table"),
+                dcc.Graph(
+                    id="indicator-graphic",
+                ),
+            ],
             style={"width": "80%", "margin": "auto"},
         ),
         html.Div(
@@ -156,7 +161,9 @@ def get_sum(hs, category, type):
     _locals = locals()
     query = f"hs = hs.filter(buldings__{category}='{type}')"
     exec(
-        query, globals(), _locals,
+        query,
+        globals(),
+        _locals,
     )
 
     bbr = _locals.get("hs")

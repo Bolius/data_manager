@@ -10,8 +10,12 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.DeleteModel(name="CategoricalBBR",),
-        migrations.DeleteModel(name="NumericBBR",),
+        migrations.DeleteModel(
+            name="CategoricalBBR",
+        ),
+        migrations.DeleteModel(
+            name="NumericBBR",
+        ),
         migrations.AddField(
             model_name="bbr",
             name="heat_install",
