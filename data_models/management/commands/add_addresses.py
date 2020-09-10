@@ -19,7 +19,7 @@ def add_ids(file):
     with open(file, "r") as ids:
         lines = [line[:-1] for line in ids.readlines() if len(line) > 10]
         lines = [line for line in lines if line not in all_ids]
-    print(f"Already has {len(all_ids) - len(lines)} in data set")
+    print(f"Already has {len(lines) - len(all_ids)} in data set")
     for line in tqdm(lines):
         try:
             House.add_house(access_id=line)
