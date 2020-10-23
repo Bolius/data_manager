@@ -5,7 +5,7 @@ dawaAutocomplete.dawaAutocomplete(
     select: function(selected) {
       console.log("Selected address:");
       console.log("YO:");
-      let url = `${url_parts[0]}//${url_parts[2]}/${selected["data"]["id"]}/`;
+      //let url = `${url_parts[0]}//${url_parts[2]}/${selected["data"]["id"]}/`;
       console.log(url)
     }
   }

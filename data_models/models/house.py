@@ -35,7 +35,7 @@ class House(geo_models.Model):  # TODO rename house address
         if (access_id, kvhx, address_text) == (None, None, None):
             raise ValueError("Either access_id, address text or kvhx must be specified")
         if access_id is not None:
-            houses = House.objects.filter(access_id=access_id)
+            houses = House.objects.filter(dawa_id=access_id)
             if len(houses) > 0:
                 return houses[0]
 

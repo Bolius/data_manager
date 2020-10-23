@@ -1,103 +1,32 @@
-{% extends './base.html' %} {% block graph %}
-hej
-{{house}}
-<div id="app" class="container">
-  <div class="accordion md-accordion" id="accordionEx" role="tablist" aria-multiselectable="true">
-    <div class="card">
-      <div class="card-header" role="tab" id="bbr_heading">
-        <a data-toggle="collapse" data-parent="#accordionEx" href="#bbr_body" aria-expanded="true"
-          aria-controls="bbr_body">
-          <h5 class="mb-0">
-            BBR Info <i class="fas fa-angle-down rotate-icon"></i>
-          </h5>
-        </a>
-      </div>
-      <div id="bbr_body" class="collapse show" role="tabpanel" aria-labelledby="bbr_heading" data-parent="#accordionEx">
-        <div class="card-body">
-          <table class="table table-hover">
-            <tr>
-              <th>Nøgleord</th>
-              <th>Værdi</th>
-              <th>Beskrivelse</th>
-            </tr>
-           {% for key, value in query_result.data.house.bbrInfo.items %}
-            <tr>
-              <td> {{ key }} </td>
-              <td> {{ value.value }} </td>
-              <td> {{ value.description }}
-            </tr>
-           {% endfor %}
-          </table>
-        </div>
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="card-header" role="tab" id="klima_heading">
-        <a data-toggle="collapse" data-parent="#accordionEx" href="#klima_body" aria-expanded="true"
-          aria-controls="klima_body">
-          <h5 class="mb-0">
-            Klima <i class="fas fa-angle-down rotate-icon"></i>
-          </h5>
-        </a>
-      </div>
-      <div id="klima_body" class="collapse" role="tabpanel" aria-labelledby="klima_heading" data-parent="#accordionEx">
-        <div class="card-body">
-          {% for key, value in query_result.data.house.waterRisk.items %}
-          <h3> {{ key }} </h3>
-          <table class="table table-hover">
+{% extends './base.html' %} {% block content %} {% load static %}
+<script type="text/javascript" src="{% static "data_models/js/address_lookup/bbr.js" %}"></script>
+<script type="text/javascript" src="{% static "data_models/js/address_lookup/main.js" %}"></script>
+<div id="address_lookup">
+  <h1>Addresseopslag for {{address}}</h1>
+<section>
+  <header>
+    <h5>BBR Data</h5>
+    <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#BbrTable" aria-expanded="true" aria-controls="BbrTable">
+      Fold sammen
+    </button>
+  </header>
+  <div id="BBR">
+    <div class="collapse show" id="BbrTable">
+      <table class="table table-bordered table-fit table-hover table-striped" style="margin:auto">
+        <thead>
+          <th>Felt</th>
+          <th>Værdi</th>
+        </thead>
+        {% for field, value in bbr  %}
           <tr>
-            <th>Nøgleord</th>
-            <th>Værdi</th>
-            <th>Beskrivelse</th>
+            <td>{{field}}</td>
+            <td>{{value}}</td>
           </tr>
-          {% for key1, value1 in value.items %}
-          <tr>
-            <td width="20%"> {{ key1 }} </td>
-            <td width="50%">
-              {% if key1 == "image" %}
-              <img style='display:block; width:300px;height:300px;' id='base64image'src='{{ value1.value }}' />
-              {% else %} {{ value1.value }} {% endif %}
-            </td>
-            <td width="30%">
-              {{ value1.description }}
-            </td>
-          </tr>
-          {% endfor %}
-          </table>
-          {% endfor %}
-        </div>
+        {% endfor %}
+      </table>
       </div>
-    </div>
-
-    <div class="card">
-      <div class="card-header" role="tab" id="radon_heading">
-        <a data-toggle="collapse" data-parent="#accordionEx" href="#radon_body" aria-expanded="true"
-          aria-controls="radon_body">
-          <h5 class="mb-0">
-            Radon <i class="fas fa-angle-down rotate-icon"></i>
-          </h5>
-        </a>
-      </div>
-      <div id="radon_body" class="collapse" role="tabpanel" aria-labelledby="radon_heading" data-parent="#accordionEx">
-        <div class="card-body">
-          <table class="table table-hover">
-            <tr>
-              <th>Nøgleord</th>
-              <th>Værdi</th>
-              <th>Beskrivelse</th>
-            </tr>
-          {% for key, value in query_result.data.house.radon.items %}
-          <tr>
-            <td> {{ key }} </td>
-            <td> {{ value.value }} </td>
-            <td> {{ value.description }} </td>
-          </tr>
-          {% endfor %}
-          </table>
-        </div>
-      </div>
-    </div>
   </div>
+</section>
 </div>
+
 {% endblock %}

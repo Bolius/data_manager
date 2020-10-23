@@ -1,0 +1,18 @@
+#address_lookup {
+    margin: 0 5%;
+    > section {
+        border: 1px solid #F0F0F0;
+        width: 60%;
+        margin: 40px auto;
+        > header {
+            > h5 {
+                padding-right: 20px;
+            }
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #FBFFFF;
+        }
+    }
+}
