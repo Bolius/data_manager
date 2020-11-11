@@ -16,7 +16,7 @@ jobs:
         run: docker-compose build
       - name: Test
         run: docker-compose run visualizer ./manage.py test
-      - uses: actions/upload-artifact@v2.1.4
+      - uses: actions/upload-artifact@v2.2.0
         if: always()
         with:
           name: selenium-screens

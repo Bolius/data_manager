@@ -17,6 +17,7 @@ services:
       - redis
     environment:
       - GEO_KEY=$GEO_KEY
+      - API_KEY=$API_KEY
       - SECRET_KEY=$SECRET_KEY
       - ADMINS=$ADMINS
       - MANAGERS=$MANAGERS
