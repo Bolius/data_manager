@@ -60,18 +60,19 @@ six = "*"
 
 [[package]]
 name = "bpython"
-version = "0.19"
+version = "0.20.1"
 description = "Fancy Interface to the Python Interpreter"
 category = "main"
 optional = false
 python-versions = "*"
 
 [package.dependencies]
-curtsies = ">=0.1.18"
+curtsies = ">=0.3.0"
 greenlet = "*"
 pygments = "*"
 requests = "*"
 six = ">=1.5"
+wcwidth = "*"
 
 [package.extras]
 jedi = ["jedi"]
@@ -956,7 +957,7 @@ brotli = ["brotli"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "5a9ca09b14f3c9c317f3992e5e5a174914d536e57b66c267e2a5d5211130f943"
+content-hash = "fb0192810c2d4919b6842c5019d7547eb83537175bb5c31e075fbe8301c2b3fa"
 
 [metadata.files]
 aniso8601 = [
@@ -980,8 +981,8 @@ blessings = [
     {file = "blessings-1.7.tar.gz", hash = "sha256:98e5854d805f50a5b58ac2333411b0482516a8210f23f43308baeb58d77c157d"},
 ]
 bpython = [
-    {file = "bpython-0.19-py2.py3-none-any.whl", hash = "sha256:95d95783bfadfa0a25300a648de5aba4423b0ee76b034022a81dde2b5e853c00"},
-    {file = "bpython-0.19.tar.gz", hash = "sha256:476ce09a896c4d34bf5e56aca64650c56fdcfce45781a20dc1521221df8cc49c"},
+    {file = "bpython-0.20.1-py2.py3-none-any.whl", hash = "sha256:4eb55cb0b3e140f4ed548600d39c33acfee57b9117797a583b40ba56a8676772"},
+    {file = "bpython-0.20.1.tar.gz", hash = "sha256:6e7738806013b469be57b0117082b9c4557ed7c92c70ceb79f96d674d89c7503"},
 ]
 brotli = [
     {file = "Brotli-1.0.9-cp27-cp27m-macosx_10_9_x86_64.whl", hash = "sha256:268fe94547ba25b58ebc724680609c8ee3e5a843202e9a381f6f9c5e8bdb5c70"},
