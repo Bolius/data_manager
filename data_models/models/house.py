@@ -1,6 +1,10 @@
 """ A model of the komfort survey data """
 from __future__ import unicode_literals
 
+import json
+import os
+
+import requests
 from django.contrib.gis.db import models as geo_models
 from django.contrib.gis.geos import Point
 
@@ -66,6 +70,66 @@ class House(geo_models.Model):  # TODO rename house address
         house.save()
         BBR.add_buldings(house)
         return house
+
+    @staticmethod
+    def add_bbr(bbrID):
+        url = f"https://apps.conzoom.eu/api/v1/values/dk/unit/{bbrID}"
+        header = {"authorization": f'Basic {os.environ["API_KEY"]}'}
+        response = requests.request("GET", url, headers=header)
+        if response.status_code != 200:
+            raise ValueError("Non '200' return code from bbr")
+        data = json.loads(response.content)
+
+        house = House()
+        house.dawa_id = data["values"]["acadr_bbrid"]
+        house.access_id = data["values"]["acadr_bbrid"]
+        house.zip_code = int(data["values"]["pcode"])
+        house.address = data["values"]["acadr_name"]
+        house.kvhx = data["values"]["kvhx_dawa"]
+        house.municipality = Municipality.objects.get(
+            admin_code="0" + data["values"]["muni"]
+        )
+        lat, lon = data["values"]["acadr_loc"]["x"], data["values"]["acadr_loc"]["y"]
+        house.coordinates = Point(lat, lon, srid=4326)
+        if House.objects.filter(access_id=house.access_id).count() < 1:
+            house.save()
+        bulding = BBR(accsses_address=house)
+        bulding.construction_year = int(data["values"]["bld_conyear"].split("-")[0])
+        if data["values"]["bld_reconyear"] is not None:
+            bulding.reconstruction_year = int(
+                data["values"]["bld_reconyear"].split("-")[0]
+            )
+        bulding.building_area = data["values"]["bld_area_resi"]
+        bulding.ground_area = data["values"]["bld_area_total"]
+        bulding.garage_area = data["values"]["bld_area_garage"]
+        bulding.carport_area = data["values"]["bld_area_carport"]
+        bulding.roof_area = (
+            0
+            if data["values"]["bld_area_roof"] is None
+            else data["values"]["bld_area_roof"]
+        )
+        bulding.commercial_area = data["values"]["bld_area_com"]
+        bulding.other_area = data["values"]["bld_area_other"]
+        if data["values"]["bld_area_basement"] is not None:
+            bulding.basement_area = data["values"]["bld_area_basement"]
+
+        bulding.num_floors = data["values"]["bld_floors"]
+        bulding.num_baths = data["values"]["unit_rooms_bath"]
+        bulding.num_toilets = data["values"]["unit_rooms_toilet"]
+        bulding.num_rooms = data["values"]["unit_rooms"]
+        bulding.residential_type = data["values"]["unit_usage"]
+        bulding.energy_type = "0"
+        bulding.heat_install = "0"
+        bulding.heat_type = "0"
+        bulding.heat_supply = "0"
+        bulding.water_supply = "0"
+        bulding.wall_material = "0"
+        bulding.roofing_material = "0"
+        bulding.property_type = "0"
+        bulding.kitchen_facility = "0"
+        bulding.toilet_facility = "0"
+        bulding.bathing_facility = "0"
+        return bulding, house
 
 
 houseFields = [

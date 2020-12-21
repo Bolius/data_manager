@@ -59,12 +59,12 @@ class BBR(models.Model):  # TODO Rename to bulding / house
     roof_area = models.IntegerField("Loft areal")
     commercial_area = models.IntegerField("Erhvervs areal")
     other_area = models.IntegerField("Kælder/loftrum osv.")
+    basement_area = models.IntegerField("Kælder størrelse", default=0)
 
     num_floors = models.IntegerField("Antal etager")
     num_baths = models.IntegerField("Antal badeværelser")
     num_toilets = models.IntegerField("Antal toiletter")
     num_rooms = models.IntegerField("Antal værelser")
-
     # TODO set to choicefield
     residential_type = models.CharField(
         "Boligtype", max_length=7, choices=RECIDENTIAL_TYPE_CHOICES

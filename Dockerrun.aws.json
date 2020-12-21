@@ -55,6 +55,12 @@
       "portMappings": [{ "containerPort": 6379 }]
     },
     {
+      "name": "radon",
+      "image": "rotendahl/radon",
+      "memoryReservation": 5,
+      "portMappings": [{ "containerPort": 8888 }]
+    },
+    {
       "name": "database",
       "image": "postgis/postgis:12-master",
       "memoryReservation": 5,
