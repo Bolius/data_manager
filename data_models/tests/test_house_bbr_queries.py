@@ -19,4 +19,3 @@ class HouseBBRQuriesTest(GraphQLTestCase):
         self.assertResponseNoErrors(response)
         bbr = response.json()["data"]["house"]["bbrInfo"]
         self.assertEqual(bbr["buildingArea"], 173)
-
