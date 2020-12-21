@@ -42,7 +42,7 @@ def bbrToRadon(data):
     encoded_form = "&".join([f"{key}={form_fields[key]}" for key in form_fields])
     resp = requests.request(
         "POST",
-        "http://radon:8888/",
+        "http://radon:8888",
         data=encoded_form,
         headers={"Content-Type": "application/x-www-form-urlencoded"},
     )

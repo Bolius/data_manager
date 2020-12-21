@@ -6,7 +6,7 @@
       "image": "rotendahl/bolius",
       "essential": true,
       "memoryReservation": 5,
-      "links": ["database", "redis"],
+      "links": ["database", "redis", "radon"],
       "portMappings": [{ "containerPort": 8000, "hostPort": 8000 }],
       "mountPoints": [
         {
