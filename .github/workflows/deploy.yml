@@ -11,7 +11,7 @@ jobs:
       - name: Check out the repo
         uses: actions/checkout@v2
       - name: Push visualizer to Dockerhub
-        uses: docker/build-push-action@v1
+        uses: docker/build-push-action@v2
         with:
           username: "${{ secrets.docker_user }}"
           password: "${{ secrets.docker_token }}"
@@ -20,7 +20,7 @@ jobs:
           tag_with_ref: true
 
       - name: Push nginx to docker hub
-        uses: docker/build-push-action@v1
+        uses: docker/build-push-action@v2
         with:
           dockerfile: nginx/Dockerfile
           path: nginx
